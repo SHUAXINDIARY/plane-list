@@ -212,10 +212,33 @@ export const CHECKED_AIRPORTS: CheckedAirport[] = [
         type: "airport",
         description: "澳大利亚悉尼机场（SYD）",
     },
+    {
+        name: "香港国际机场",
+        lat: 22.308047,
+        lng: 113.918481,
+        type: "airport",
+        description: "中国香港香港国际机场（HKG）",
+    },
 ];
 
 /** 当前个人档案中的乘机记录，按出发日期从新到旧排列。 */
 export const FLIGHT_RECORDS: FlightRecord[] = [
+    {
+        airline: "国泰航空",
+        aircraft: "350-900",
+        origin: "北京首都",
+        destination: "香港",
+        routeKind: "one-way",
+        departureDate: "2027-1-1",
+    },
+    {
+        airline: "国泰航空",
+        aircraft: "330-300",
+        origin: "香港",
+        destination: "北京首都",
+        routeKind: "one-way",
+        departureDate: "2027-1-4",
+    },
     {
         airline: "新加坡航空",
         aircraft: "787-10",
