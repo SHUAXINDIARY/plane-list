@@ -20,6 +20,19 @@ const FLIGHT_ROUTE_SEPARATOR_LABEL: Record<FlightRouteSeparator, string> = {
 /** 乘机记录出发日期的固定数据格式。 */
 const FLIGHT_DEPARTURE_DATE_PATTERN = /^(\d{4})-(\d{1,2})-(\d{1,2})$/;
 
+/** 按数字片段自然比较机型名称，相同片段继续比较后续内容。 */
+const AIRCRAFT_NAME_COLLATOR = new Intl.Collator("zh-CN", {
+    numeric: true,
+    sensitivity: "base",
+});
+
+/** 对完整机型名称执行自然排序，兼容数字、连字符和字母后缀。 */
+const compareAircraftNames = (
+    firstAircraftName: string,
+    secondAircraftName: string,
+): number =>
+    AIRCRAFT_NAME_COLLATOR.compare(firstAircraftName, secondAircraftName);
+
 /**
  * 判断出发日是否严格晚于用户本地当天；格式不合法的历史数据不展示状态标签。
  */
@@ -195,16 +208,9 @@ const FlightRecordsAircraftChart = (): ReactElement => {
                 group.records.flatMap((record) => getMetricValues(record, metric)),
             ),
         ),
-    )
+    );
     if (metric === "aircraft") {
-        metricValues = metricValues.sort((a, b) => {
-            const _A = a[0];
-            const _B = b[0];
-            if (_A === _B) {
-                return Number(a[1]) - Number(b[1]);
-            }
-            return Number(_A) - Number(_B);
-        });
+        metricValues = metricValues.sort(compareAircraftNames);
     }
 
     const countMetric = (group: FlightYearGroup, value: string): number =>

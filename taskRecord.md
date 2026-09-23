@@ -9107,3 +9107,25 @@
 - `src/App.css`：新增 `--pl-text-on-accent` 亮暗主题文字 token。
 - `src/pages/personal/index.css`：优化乘机记录统计、热力图和台账数据的字体颜色层级。
 - `taskRecord.md`：追加本次字体颜色优化记录。
+
+---
+
+## 日期
+
+2026-09-23
+
+## 任务目的
+
+优化年度机型热力图的机型名称排序，使相同前缀继续比较后续数字或字符。
+
+## 完成过程
+
+1. 将原先只比较机型名称前两位的排序逻辑替换为完整名称自然排序。
+2. 使用模块级 `Intl.Collator` 复用比较器，正确处理数字片段、连字符和字母后缀。
+3. 验证 `787-8`、`787-10`、`737-MAX8` 与 `C919` 等现有机型格式的排序结果。
+4. 运行 `pnpm run type-check`；检查仍被既有的 `ViewportNavigationControls.tsx:33` 未使用参数错误拦截，本次修改未引入新的类型诊断。
+
+## 修改具体文件
+
+- `src/pages/personal/sections/PersonalFlightRecordsSection.tsx`：新增机型名称自然排序比较器并替换原有前两位比较逻辑。
+- `taskRecord.md`：追加本次机型排序优化与验证记录。
