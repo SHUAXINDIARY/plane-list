@@ -1,7 +1,5 @@
 # Task Record
 
-## 日期
-
 2026-05-17
 
 ## 任务目的
@@ -8952,3 +8950,26 @@
 - `src/pages/personal/data/aircraftPhotosData.ts`：更新照片发布与原图展示职责说明。
 - `src/pages/personal/type.d.ts`：明确 `originalUrl` 用于全屏原图、`previewUrl` 用于本地缩略图。
 - `taskRecord.md`：追加本次全屏原图切换与验证记录。
+
+---
+
+## 日期
+
+2026-09-23
+
+## 任务目的
+
+在个人页乘机记录区域新增年度乘机次数可视化图表，帮助快速观察飞行记录分布。
+
+## 完成过程
+
+1. 复用现有按年份聚合的乘机记录数据，计算年度记录数量与图表最大值。
+2. 在乘机台账统计区下方增加响应式横向柱状图，并提供同步的无障碍表格语义。
+3. 补充桌面端与移动端样式、减少动态偏好下的动画禁用规则。
+4. 运行 `pnpm run build` 验证 TypeScript 与样式集成，构建成功。
+
+## 修改具体文件
+
+- `src/pages/personal/sections/PersonalFlightRecordsSection.tsx`：新增年度乘机次数图表组件。
+- `src/pages/personal/index.css`：新增图表布局、柱状条与响应式样式。
+- `taskRecord.md`：追加本次图表功能记录。

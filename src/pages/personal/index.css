@@ -1545,6 +1545,93 @@
   font-size: 0.95rem;
 }
 
+.flight-records-chart {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--pl-border-divider);
+}
+
+.flight-records-chart__header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.flight-records-chart h3 {
+  margin: 0.3rem 0 0;
+  color: var(--pl-text-heading);
+  font-family: var(--pl-font-display);
+  font-size: 1rem;
+}
+
+.flight-records-chart__unit {
+  color: var(--pl-text-meta);
+  font-family: var(--pl-font-mono);
+  font-size: 0.72rem;
+}
+
+.flight-records-chart__plot {
+  display: grid;
+  gap: 0.58rem;
+}
+
+.flight-records-chart__row {
+  display: grid;
+  grid-template-columns: 3.2rem minmax(0, 1fr) 2rem;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.flight-records-chart__year,
+.flight-records-chart__value {
+  color: var(--pl-text-secondary);
+  font-family: var(--pl-font-mono);
+  font-size: 0.76rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.flight-records-chart__value {
+  color: var(--pl-text-emphasis);
+  text-align: right;
+}
+
+.flight-records-chart__track {
+  display: block;
+  height: 0.62rem;
+  overflow: hidden;
+  background-color: var(--pl-surface-personal-pill);
+  border-radius: 999px;
+}
+
+.flight-records-chart__bar {
+  display: block;
+  width: calc(var(--flight-record-bar-scale) * 100%);
+  height: 100%;
+  background-color: var(--pl-accent);
+  border-radius: inherit;
+  transform-origin: left center;
+  animation: personal-chart-grow 520ms var(--motion-ease-out-quint) both;
+}
+
+@keyframes personal-chart-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .flight-ledger__body {
   display: grid;
   gap: 1.25rem;
@@ -1950,6 +2037,17 @@
     touch-action: manipulation;
   }
 
+  .flight-records-chart__header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .flight-records-chart__row {
+    grid-template-columns: 2.9rem minmax(0, 1fr) 1.5rem;
+    gap: 0.55rem;
+  }
+
   .flight-ledger-row {
     grid-template-areas:
       "identity date"
@@ -2044,6 +2142,7 @@
   .personal-viewport-section > .airport-country-list,
   .airport-country--expanded li,
   .flight-ledger,
+  .flight-records-chart__bar,
   .flight-ledger-row {
     animation: none !important;
   }
