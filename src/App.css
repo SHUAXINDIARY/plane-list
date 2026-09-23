@@ -18,6 +18,7 @@
     --pl-text-data: #2b3d47;
     --pl-text-english: #718087;
     --pl-text-chip: #30414a;
+    --pl-text-on-accent: #f4fbfb;
 
     --pl-accent: #176b7d;
     --pl-link: #075d78;
@@ -196,6 +197,7 @@ html[data-theme="dark"] {
     --pl-text-data: #d9e7ee;
     --pl-text-english: #9cb5c2;
     --pl-text-chip: #d6e5ed;
+    --pl-text-on-accent: #082033;
     --pl-accent: #7cc8eb;
     --pl-link: #9ed8f2;
     --pl-link-decoration: rgba(158, 216, 242, 0.36);

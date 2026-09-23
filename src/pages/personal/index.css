@@ -1531,7 +1531,7 @@
   gap: 0.35rem;
   min-height: 2.15rem;
   padding: 0 0.75rem;
-  color: var(--pl-text-secondary);
+  color: var(--pl-text-data);
   font-size: 0.86rem;
   font-weight: 700;
   background-color: var(--pl-surface-pill);
@@ -1540,7 +1540,7 @@
 }
 
 .flight-ledger__stats strong {
-  color: var(--pl-text-emphasis);
+  color: var(--pl-accent);
   font-family: var(--pl-font-display);
   font-size: 0.95rem;
 }
@@ -1586,14 +1586,15 @@
 
 .flight-records-chart__year,
 .flight-records-chart__value {
-  color: var(--pl-text-secondary);
+  color: var(--pl-text-data);
   font-family: var(--pl-font-mono);
   font-size: 0.76rem;
   font-variant-numeric: tabular-nums;
 }
 
 .flight-records-chart__value {
-  color: var(--pl-text-emphasis);
+  color: var(--pl-accent);
+  font-weight: 700;
   text-align: right;
 }
 
@@ -1720,7 +1721,7 @@
 .flight-aircraft-chart__switcher button {
   min-height: 1.9rem;
   padding: 0 0.55rem;
-  color: var(--pl-text-secondary);
+  color: var(--pl-text-data);
   font: inherit;
   font-size: 0.72rem;
   font-weight: 700;
@@ -1752,7 +1753,8 @@
 
 .flight-aircraft-chart__cell {
   justify-content: center;
-  color: var(--pl-text-emphasis);
+  color: var(--pl-text-on-accent);
+  font-weight: 700;
   background-color: var(--pl-accent);
   border-radius: 0.4rem;
   transition: opacity var(--motion-duration-fast) var(--motion-ease-out-quart);
@@ -1840,7 +1842,7 @@
 
 .flight-year-block__meta {
   justify-self: end;
-  color: var(--pl-text-meta);
+  color: var(--pl-text-data);
   font-family: var(--pl-font-mono);
   font-size: 0.82rem;
   font-variant-numeric: tabular-nums;
@@ -1972,7 +1974,7 @@
 .flight-ledger-row__route-point {
   min-width: 0;
   overflow: hidden;
-  color: var(--pl-text-secondary);
+  color: var(--pl-text-data);
   font-size: 0.9rem;
   font-weight: 700;
   text-align: right;
@@ -2014,7 +2016,7 @@
 }
 
 .flight-ledger-row__date-value {
-  color: var(--pl-text-secondary);
+  color: var(--pl-text-data);
   font-size: 0.82rem;
 }
 
