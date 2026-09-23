@@ -408,6 +408,22 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
         departureDate: "2026-1-1",
     },
     {
+        airline: "摩洛哥皇家航空",
+        aircraft: "787-8",
+        origin: "摩洛哥-卡萨布兰卡穆罕默德五世机场",
+        destination: "中国-北京首都",
+        routeKind: "one-way",
+        departureDate: "2025-10-11",
+    },
+    {
+        airline: "摩洛哥皇家航空",
+        aircraft: "737-800",
+        origin: "法国-巴黎奥利",
+        destination: "摩洛哥-卡萨布兰卡穆罕默德五世机场",
+        routeKind: "one-way",
+        departureDate: "2025-10-11",
+    },
+    {
         airline: "泛航航空",
         aircraft: "320-200",
         origin: "意大利-罗马菲乌米奇诺",
