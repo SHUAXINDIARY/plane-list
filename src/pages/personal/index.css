@@ -1748,7 +1748,8 @@
 
 .flight-aircraft-chart__label {
   overflow-wrap: anywhere;
-  color: var(--pl-text-secondary);
+  color: var(--pl-text-data);
+  font-weight: 600;
 }
 
 .flight-aircraft-chart__cell {
