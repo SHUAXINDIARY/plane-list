@@ -289,7 +289,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国东方航空",
-        aircraft: "321",
+        aircraft: "321NEO",
         origin: "西安",
         destination: "北京",
         routeKind: "one-way",
@@ -297,7 +297,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国东方航空",
-        aircraft: "320",
+        aircraft: "320NEO",
         origin: "北京",
         destination: "西安",
         routeKind: "one-way",
@@ -321,7 +321,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "泰国航空",
-        aircraft: "350-941",
+        aircraft: "350-900",
         origin: "曼谷",
         destination: "北京",
         routeKind: "one-way",
@@ -329,7 +329,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "泰国航空",
-        aircraft: "320-232",
+        aircraft: "320-200",
         origin: "清迈",
         destination: "曼谷",
         routeKind: "one-way",
@@ -345,7 +345,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国东方航空",
-        aircraft: "321-231",
+        aircraft: "321-200",
         origin: "北京",
         destination: "昆明",
         routeKind: "one-way",
@@ -353,7 +353,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国南方航空",
-        aircraft: "321-251",
+        aircraft: "321-200",
         origin: "西安",
         destination: "北京",
         routeKind: "one-way",
@@ -361,7 +361,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国东方航空",
-        aircraft: "321-251",
+        aircraft: "321-200",
         origin: "北京",
         destination: "西安",
         routeKind: "one-way",
@@ -369,7 +369,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国南方航空",
-        aircraft: "321-253",
+        aircraft: "321-200",
         origin: "广州",
         destination: "北京",
         routeKind: "one-way",
@@ -377,7 +377,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国南方航空",
-        aircraft: "737-81B",
+        aircraft: "737-800",
         origin: "西安",
         destination: "广州",
         routeKind: "one-way",
@@ -385,7 +385,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "河北航空",
-        aircraft: "737-85C",
+        aircraft: "737-800",
         origin: "西安",
         destination: "西峰",
         routeKind: "one-way",
@@ -393,7 +393,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国国际航空",
-        aircraft: "330-343",
+        aircraft: "330-300",
         origin: "首尔",
         destination: "北京",
         routeKind: "one-way",
@@ -401,7 +401,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国国际航空",
-        aircraft: "737-89L",
+        aircraft: "737-800",
         origin: "北京",
         destination: "首尔",
         routeKind: "one-way",
@@ -409,7 +409,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "泛航航空",
-        aircraft: "320-252",
+        aircraft: "320-200",
         origin: "罗马",
         destination: "巴黎",
         routeKind: "one-way",
@@ -417,7 +417,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "瑞安航空",
-        aircraft: "737-8",
+        aircraft: "737-MAX8",
         origin: "巴塞罗那",
         destination: "罗马",
         routeKind: "one-way",
@@ -425,7 +425,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国东方航空",
-        aircraft: "350-941",
+        aircraft: "350-900",
         origin: "上海",
         destination: "巴塞罗那",
         routeKind: "one-way",
@@ -433,7 +433,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国东方航空",
-        aircraft: "321-251",
+        aircraft: "321-200",
         origin: "北京",
         destination: "上海",
         routeKind: "one-way",
@@ -441,7 +441,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国国际航空",
-        aircraft: "737-89L",
+        aircraft: "737-800",
         origin: "名古屋",
         destination: "北京",
         routeKind: "round-trip",
@@ -450,7 +450,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "泰国航空",
-        aircraft: "350-941",
+        aircraft: "350-900",
         origin: "曼谷",
         destination: "北京",
         routeKind: "one-way",
@@ -474,7 +474,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国东方航空",
-        aircraft: "321-211",
+        aircraft: "321-200",
         origin: "北京",
         destination: "上海",
         routeKind: "one-way",
@@ -482,7 +482,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "吉祥航空",
-        aircraft: "320-214",
+        aircraft: "320-200",
         origin: "北京",
         destination: "大阪",
         routeKind: "round-trip",
@@ -491,7 +491,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国国际航空",
-        aircraft: "321-213",
+        aircraft: "321-200",
         origin: "首尔",
         destination: "北京",
         routeKind: "one-way",
@@ -499,7 +499,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国国际航空",
-        aircraft: "737-89L",
+        aircraft: "737-800",
         origin: "北京",
         destination: "首尔",
         routeKind: "one-way",
@@ -515,7 +515,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "河北航空",
-        aircraft: "737",
+        aircraft: "737-800",
         origin: "北京",
         destination: "西峰",
         routeKind: "one-way",
@@ -548,7 +548,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "亚洲航空",
-        aircraft: "320-CEO",
+        aircraft: "320-200",
         origin: "北京",
         destination: "曼谷",
         routeKind: "one-way",
@@ -556,7 +556,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国东方航空",
-        aircraft: "330-343",
+        aircraft: "330-300",
         origin: "上海",
         destination: "北京",
         routeKind: "one-way",
@@ -564,7 +564,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国国际航空",
-        aircraft: "330-243",
+        aircraft: "330-200",
         origin: "北京",
         destination: "上海",
         routeKind: "one-way",
@@ -580,7 +580,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国国际航空",
-        aircraft: "330",
+        aircraft: "330-300",
         origin: "北京",
         destination: "东京",
         routeKind: "one-way",
@@ -588,7 +588,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国南方航空",
-        aircraft: "321-253",
+        aircraft: "321-200",
         origin: "西安",
         destination: "北京",
         routeKind: "one-way",
@@ -596,7 +596,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "河北航空",
-        aircraft: "737",
+        aircraft: "737-800",
         origin: "北京",
         destination: "西峰",
         routeKind: "one-way",
@@ -604,7 +604,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国联合航空",
-        aircraft: "330-343",
+        aircraft: "330-300",
         origin: "上海",
         destination: "北京",
         routeKind: "one-way",
@@ -612,7 +612,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国国际航空",
-        aircraft: "321-251",
+        aircraft: "321-200",
         origin: "北京",
         destination: "上海",
         routeKind: "one-way",
@@ -620,7 +620,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "天津航空",
-        aircraft: "320-232",
+        aircraft: "320-200",
         origin: "大阪",
         destination: "天津",
         routeKind: "one-way",
@@ -636,7 +636,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "首都航空",
-        aircraft: "330-343",
+        aircraft: "330-300",
         origin: "三亚",
         destination: "北京",
         routeKind: "one-way",
@@ -644,7 +644,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国国际航空",
-        aircraft: "320-243",
+        aircraft: "320-200",
         origin: "北京",
         destination: "三亚",
         routeKind: "one-way",
@@ -652,7 +652,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国南方航空",
-        aircraft: "737-81B",
+        aircraft: "737-800",
         origin: "武汉",
         destination: "北京",
         routeKind: "one-way",
@@ -660,7 +660,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "四川航空",
-        aircraft: "320-214",
+        aircraft: "320-200",
         origin: "昆明",
         destination: "北京",
         routeKind: "one-way",
@@ -668,7 +668,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国东方航空",
-        aircraft: "737-89P",
+        aircraft: "737-800",
         origin: "西安",
         destination: "昆明",
         routeKind: "one-way",
@@ -676,7 +676,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国东方航空",
-        aircraft: "321-211",
+        aircraft: "321-200",
         origin: "北京",
         destination: "西安",
         routeKind: "one-way",
@@ -684,7 +684,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国南方航空",
-        aircraft: "321-231",
+        aircraft: "321-200",
         origin: "武汉",
         destination: "北京",
         routeKind: "one-way",
@@ -692,7 +692,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "中国南方航空",
-        aircraft: "737-86FN",
+        aircraft: "737-800",
         origin: "北京",
         destination: "武汉",
         routeKind: "one-way",
@@ -700,7 +700,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "长龙航空",
-        aircraft: "320-214",
+        aircraft: "320-200",
         origin: "西安",
         destination: "杭州",
         routeKind: "one-way",
@@ -708,7 +708,7 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
     },
     {
         airline: "长安航空",
-        aircraft: "737-8FH",
+        aircraft: "737-800",
         origin: "西安",
         destination: "宜昌",
         routeKind: "one-way",

@@ -8973,3 +8973,71 @@
 - `src/pages/personal/sections/PersonalFlightRecordsSection.tsx`：新增年度乘机次数图表组件。
 - `src/pages/personal/index.css`：新增图表布局、柱状条与响应式样式。
 - `taskRecord.md`：追加本次图表功能记录。
+
+---
+
+## 日期
+
+2026-09-23
+
+## 任务目的
+
+修复 `PersonalFlightRecordsSection.tsx` 中新增图表引起的 TypeScript 类型错误。
+
+## 完成过程
+
+1. 运行 `pnpm run type-check`，定位到两个自定义 CSS 变量对象不符合 React `style` 类型的问题。
+2. 将图表条宽度改为标准 `width` 样式值，并同步移除 CSS 中对应的自定义变量计算。
+3. 再次运行类型检查，目标文件已无诊断；检查仍被既有的 `ViewportNavigationControls.tsx:33` 未使用参数错误拦截。
+
+## 修改具体文件
+
+- `src/pages/personal/sections/PersonalFlightRecordsSection.tsx`：修复两个图表条 `style` 属性的类型错误。
+- `src/pages/personal/index.css`：移除已不再使用的自定义宽度变量。
+- `taskRecord.md`：追加本次类型修复记录。
+
+---
+
+## 日期
+
+2026-09-23
+
+## 任务目的
+
+优化每年乘机机型概览的可视化表达，提升跨年份比较能力。
+
+## 完成过程
+
+1. 将按年份纵向条形列表调整为“年份 × 机型”热力图。
+2. 使用单元格数字和透明度同时表达乘机次数，零值保留可读占位符。
+3. 桌面端使用矩阵布局，移动端支持横向滚动，并保留无障碍数据表格。
+4. 运行 `pnpm run type-check`，目标文件无新增类型错误；检查仍被项目既有的 `ViewportNavigationControls.tsx:33` 错误拦截。
+
+## 修改具体文件
+
+- `src/pages/personal/sections/PersonalFlightRecordsSection.tsx`：改为年度 × 机型热力图并补充交叉统计辅助函数。
+- `src/pages/personal/index.css`：新增热力图矩阵、单元格和横向滚动样式。
+- `taskRecord.md`：追加本次可视化调整记录。
+
+---
+
+## 日期
+
+2026-09-23
+
+## 任务目的
+
+在个人页乘机记录区域新增每年乘机机型概览可视化。
+
+## 完成过程
+
+1. 复用现有年度乘机记录分组，按年份统计各机型出现次数并按次数降序排列。
+2. 新增年度机型条形概览及同步的无障碍数据表格。
+3. 补充桌面端与移动端布局，并沿用现有动效与颜色变量。
+4. 运行 `pnpm run build` 验证构建成功。
+
+## 修改具体文件
+
+- `src/pages/personal/sections/PersonalFlightRecordsSection.tsx`：新增年度机型统计与可视化组件。
+- `src/pages/personal/index.css`：新增年度机型图表样式及移动端适配。
+- `taskRecord.md`：追加本次图表功能记录。

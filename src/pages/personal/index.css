@@ -1607,12 +1607,127 @@
 
 .flight-records-chart__bar {
   display: block;
-  width: calc(var(--flight-record-bar-scale) * 100%);
   height: 100%;
   background-color: var(--pl-accent);
   border-radius: inherit;
   transform-origin: left center;
   animation: personal-chart-grow 520ms var(--motion-ease-out-quint) both;
+}
+
+.flight-aircraft-chart {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--pl-border-divider);
+}
+
+.flight-aircraft-chart__plot {
+  display: grid;
+  gap: 1rem;
+}
+
+.flight-aircraft-chart__year-group {
+  display: grid;
+  grid-template-columns: 3.2rem minmax(0, 1fr);
+  gap: 0.7rem;
+  align-items: start;
+}
+
+.flight-aircraft-chart h4 {
+  margin: 0.1rem 0 0;
+  color: var(--pl-accent);
+  font-family: var(--pl-font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+}
+
+.flight-aircraft-chart__rows {
+  display: grid;
+  gap: 0.42rem;
+}
+
+.flight-aircraft-chart__row {
+  display: grid;
+  grid-template-columns: minmax(5rem, 8.5rem) minmax(0, 1fr) 1.5rem;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.flight-aircraft-chart__label,
+.flight-aircraft-chart__row strong {
+  color: var(--pl-text-secondary);
+  font-family: var(--pl-font-mono);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.flight-aircraft-chart__row strong {
+  color: var(--pl-text-emphasis);
+  text-align: right;
+}
+
+.flight-aircraft-chart__track {
+  display: block;
+  height: 0.46rem;
+  overflow: hidden;
+  background-color: var(--pl-surface-personal-pill);
+  border-radius: 999px;
+}
+
+.flight-aircraft-chart__bar {
+  display: block;
+  height: 100%;
+  background-color: var(--pl-text-chip);
+  border-radius: inherit;
+  animation: personal-chart-grow 520ms var(--motion-ease-out-quint) both;
+}
+
+.flight-aircraft-chart__scroll {
+  overflow-x: auto;
+  padding-bottom: 0.2rem;
+}
+
+.flight-aircraft-chart__grid {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, 8.5rem) repeat(5, minmax(3.6rem, 1fr));
+  gap: 0.35rem;
+  min-width: 28rem;
+}
+
+.flight-aircraft-chart__corner,
+.flight-aircraft-chart__year,
+.flight-aircraft-chart__label,
+.flight-aircraft-chart__cell {
+  display: flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0 0.45rem;
+  font-family: var(--pl-font-mono);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.flight-aircraft-chart__corner {
+  color: var(--pl-text-meta);
+}
+
+.flight-aircraft-chart__year {
+  justify-content: center;
+  color: var(--pl-accent);
+}
+
+.flight-aircraft-chart__label {
+  overflow-wrap: anywhere;
+  color: var(--pl-text-secondary);
+}
+
+.flight-aircraft-chart__cell {
+  justify-content: center;
+  color: var(--pl-text-emphasis);
+  background-color: var(--pl-accent);
+  border-radius: 0.4rem;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-out-quart);
 }
 
 @keyframes personal-chart-grow {
@@ -2046,6 +2161,16 @@
   .flight-records-chart__row {
     grid-template-columns: 2.9rem minmax(0, 1fr) 1.5rem;
     gap: 0.55rem;
+  }
+
+  .flight-aircraft-chart__year-group {
+    grid-template-columns: 2.9rem minmax(0, 1fr);
+    gap: 0.55rem;
+  }
+
+  .flight-aircraft-chart__row {
+    grid-template-columns: minmax(4.25rem, 6rem) minmax(0, 1fr) 1.35rem;
+    gap: 0.4rem;
   }
 
   .flight-ledger-row {
