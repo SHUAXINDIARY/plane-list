@@ -9129,3 +9129,23 @@
 
 - `src/pages/personal/sections/PersonalFlightRecordsSection.tsx`：新增机型名称自然排序比较器并替换原有前两位比较逻辑。
 - `taskRecord.md`：追加本次机型排序优化与验证记录。
+
+---
+
+## 日期
+
+2026-09-23
+
+## 任务目的
+
+核实并补充 Airbus A319/A320/A321 的 Sharklet（SL）衍生机型。
+
+## 完成过程
+
+1. 查阅 Airbus 官方 Sharklet 资料及机型代码资料，确认 A319、A320、A321 均存在 Sharklet 配置；对应常见 IATA 代码为 32D、32A、32B。
+2. 在 A320 家族 `ceo` 分组中新增 A319SL、A320SL、A321SL，并保留各自的 ICAO 类型码与母型基础参数。
+
+## 修改具体文件
+
+- `public/data/aircraft.json`：新增 A319SL、A320SL、A321SL 三条机型记录。
+- `taskRecord.md`：追加本次 SL 机型补充记录。

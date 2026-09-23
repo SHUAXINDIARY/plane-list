@@ -1285,6 +1285,27 @@
             "mtowKg": 75500,
             "wikipedia": "https://en.wikipedia.org/wiki/Airbus_A320_family"
           },
+          "A319SL": {
+            "model": "A319SL",
+            "icaoType": "A319",
+            "status": "discontinued",
+            "firstFlight": "1995-08-25",
+            "engines": [
+              "CFM56-5A",
+              "CFM56-5B",
+              "V2500-A5"
+            ],
+            "seats": {
+              "typical": 128,
+              "max": 156
+            },
+            "rangeKm": 6950,
+            "lengthM": 33.84,
+            "wingspanM": 35.8,
+            "heightM": 11.76,
+            "mtowKg": 75500,
+            "wikipedia": "https://en.wikipedia.org/wiki/Airbus_A320_family"
+          },
           "A320": {
             "model": "A320",
             "icaoType": "A320",
@@ -1306,8 +1327,49 @@
             "mtowKg": 78000,
             "wikipedia": "https://en.wikipedia.org/wiki/Airbus_A320_family"
           },
+          "A320SL": {
+            "model": "A320SL",
+            "icaoType": "A320",
+            "status": "discontinued",
+            "firstFlight": "1987-02-22",
+            "engines": [
+              "CFM56-5A",
+              "CFM56-5B",
+              "V2500-A5"
+            ],
+            "seats": {
+              "typical": 150,
+              "max": 180
+            },
+            "rangeKm": 6100,
+            "lengthM": 37.57,
+            "wingspanM": 35.8,
+            "heightM": 11.76,
+            "mtowKg": 78000,
+            "wikipedia": "https://en.wikipedia.org/wiki/Airbus_A320_family"
+          },
           "A321": {
             "model": "A321",
+            "icaoType": "A321",
+            "status": "discontinued",
+            "firstFlight": "1993-03-11",
+            "engines": [
+              "CFM56-5B",
+              "V2500-A5"
+            ],
+            "seats": {
+              "typical": 185,
+              "max": 220
+            },
+            "rangeKm": 5950,
+            "lengthM": 44.51,
+            "wingspanM": 35.8,
+            "heightM": 11.76,
+            "mtowKg": 93500,
+            "wikipedia": "https://en.wikipedia.org/wiki/Airbus_A320_family"
+          },
+          "A321SL": {
+            "model": "A321SL",
             "icaoType": "A321",
             "status": "discontinued",
             "firstFlight": "1993-03-11",
