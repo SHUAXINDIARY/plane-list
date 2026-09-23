@@ -1708,6 +1708,34 @@
   font-variant-numeric: tabular-nums;
 }
 
+.flight-aircraft-chart__switcher {
+  display: inline-flex;
+  gap: 0.2rem;
+  padding: 0.2rem;
+  background-color: var(--pl-surface-personal-pill);
+  border: 1px solid var(--pl-border-muted);
+  border-radius: 0.55rem;
+}
+
+.flight-aircraft-chart__switcher button {
+  min-height: 1.9rem;
+  padding: 0 0.55rem;
+  color: var(--pl-text-secondary);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: 0.35rem;
+}
+
+.flight-aircraft-chart__switcher button[aria-pressed="true"] {
+  color: var(--pl-text-heading);
+  background-color: var(--pl-surface-entry);
+  box-shadow: var(--pl-shadow-card);
+}
+
 .flight-aircraft-chart__corner {
   color: var(--pl-text-meta);
 }

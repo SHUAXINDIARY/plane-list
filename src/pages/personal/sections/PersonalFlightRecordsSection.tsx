@@ -10,6 +10,8 @@ import type {
     FlightRecord,
     FlightRouteSeparator,
 } from "../../../constants/type";
+import { CHECKED_AIRPORTS } from "../../../constants/external-links";
+import type { CheckedAirport } from "../../../constants/type";
 
 /** 单程路线连接符映射，供台账行内展示。 */
 const FLIGHT_ROUTE_SEPARATOR_LABEL: Record<FlightRouteSeparator, string> = {
@@ -88,76 +90,23 @@ const FLIGHT_RECORD_CHART_MAX = Math.max(
     1,
 );
 
-/** 按年份聚合后的机型计数，供年度机型概览图表使用。 */
-interface AircraftTypeCount {
-    /** 机型名称。 */
-    aircraft: string;
-    /** 该年份内出现次数。 */
-    count: number;
-}
+type FlightChartMetric = "aircraft" | "airline" | "country";
 
-/** 将一组乘机记录转换为按出现次数降序排列的机型统计。 */
-const countAircraftTypes = (records: FlightRecord[]): AircraftTypeCount[] => {
-    const counts = new Map<string, number>();
-
-    records.forEach((flightRecord: FlightRecord): void => {
-        counts.set(
-            flightRecord.aircraft,
-            (counts.get(flightRecord.aircraft) ?? 0) + 1,
-        );
-    });
-
-    return Array.from(counts.entries())
-        .map(
-            ([aircraft, count]: [string, number]): AircraftTypeCount => ({
-                aircraft,
-                count,
-            }),
-        )
-        .sort(
-            (
-                firstType: AircraftTypeCount,
-                secondType: AircraftTypeCount,
-            ): number =>
-                secondType.count - firstType.count ||
-                firstType.aircraft.localeCompare(secondType.aircraft),
-        );
+const getCountryForAirport = (airportName: string): string => {
+    const airport = CHECKED_AIRPORTS.find((candidate: CheckedAirport): boolean =>
+        airportName.startsWith(candidate.name.replace(/国际机场|机场$/, "")),
+    );
+    const match = airport?.description.match(
+        /^(中国|日本|泰国|西班牙|意大利|法国|摩洛哥|韩国|新加坡|澳大利亚)/,
+    );
+    return match?.[1] ?? "其他地区";
 };
 
-/** 全部年份中单个机型的最大年度出现次数，用于统一条形比例。 */
-const AIRCRAFT_CHART_MAX = Math.max(
-    ...flightRecordsByYear.flatMap(
-        (flightYearGroup: FlightYearGroup): number[] =>
-            countAircraftTypes(flightYearGroup.records).map(
-                (aircraftType: AircraftTypeCount): number => aircraftType.count,
-            ),
-    ),
-    1,
-);
-
-/** 热力图纵轴中的机型，按全部记录中的出现频次降序排列。 */
-const ALL_AIRCRAFT_TYPES: string[] = Array.from(
-    new Set(
-        flightRecordsByYear.flatMap(
-            (flightYearGroup: FlightYearGroup): string[] =>
-                flightYearGroup.records.map(
-                    (flightRecord: FlightRecord): string => flightRecord.aircraft,
-                ),
-        ),
-    ),
-).sort((firstAircraft: string, secondAircraft: string): number =>
-    secondAircraft.localeCompare(firstAircraft),
-);
-
-/** 获取某个年份与机型交叉单元格中的乘机次数。 */
-const getAircraftCountForYear = (
-    flightYearGroup: FlightYearGroup,
-    aircraft: string,
-): number =>
-    flightYearGroup.records.filter(
-        (flightRecord: FlightRecord): boolean =>
-            flightRecord.aircraft === aircraft,
-    ).length;
+const getMetricValues = (record: FlightRecord, metric: FlightChartMetric): string[] => {
+    if (metric === "aircraft") return [record.aircraft];
+    if (metric === "airline") return [record.airline];
+    return [getCountryForAirport(record.origin), getCountryForAirport(record.destination)];
+};
 
 /** 乘机记录年度分布图，图形与文本数据保持同步。 */
 const FlightRecordsYearChart = (): ReactElement => (
@@ -227,17 +176,48 @@ const FlightRecordsYearChart = (): ReactElement => (
 );
 
 /** 按年份展示乘机机型构成，图形与屏幕阅读器表格保持同步。 */
-const FlightRecordsAircraftChart = (): ReactElement => (
+const FlightRecordsAircraftChart = (): ReactElement => {
+    const [metric, setMetric] = useState<FlightChartMetric>("aircraft");
+    const metricNames: Record<FlightChartMetric, string> = {
+        aircraft: "机型",
+        airline: "航司",
+        country: "国家或地区",
+    };
+    const metricValues = Array.from(
+        new Set(
+            flightRecordsByYear.flatMap((group) =>
+                group.records.flatMap((record) => getMetricValues(record, metric)),
+            ),
+        ),
+    );
+    const countMetric = (group: FlightYearGroup, value: string): number =>
+        group.records.reduce(
+            (total, record) =>
+                total + getMetricValues(record, metric).filter((item) => item === value).length,
+            0,
+        );
+    const maxMetricCount = Math.max(
+        ...flightRecordsByYear.flatMap((group) => metricValues.map((value) => countMetric(group, value))),
+        1,
+    );
+
+    return (
     <section
         className="flight-aircraft-chart"
         aria-labelledby="flight-aircraft-chart-title"
     >
         <div className="flight-records-chart__header">
             <div>
-                <p className="personal-section__eyebrow">Aircraft mix</p>
-                <h3 id="flight-aircraft-chart-title">每年乘机机型概览</h3>
+                <p className="personal-section__eyebrow">Annual mix</p>
+                <h3 id="flight-aircraft-chart-title">每年{metricNames[metric]}概览</h3>
             </div>
-            <span className="flight-records-chart__unit">按乘机次数</span>
+            <div className="flight-aircraft-chart__switcher" role="group" aria-label="切换统计维度">
+                {(Object.keys(metricNames) as FlightChartMetric[]).map((option) => (
+                    <button type="button" key={option} aria-pressed={metric === option} onClick={() => setMetric(option)}>
+                        {metricNames[option]}
+                    </button>
+                ))}
+            </div>
         </div>
         <div className="flight-aircraft-chart__scroll" role="img" aria-label="按年份统计的乘机机型热力图">
             <div
@@ -246,7 +226,7 @@ const FlightRecordsAircraftChart = (): ReactElement => (
                     gridTemplateColumns: `minmax(6.5rem, 8.5rem) repeat(${flightRecordsByYear.length}, minmax(3.6rem, 1fr))`,
                 }}
             >
-                <span className="flight-aircraft-chart__corner">机型 / 年份</span>
+                <span className="flight-aircraft-chart__corner">{metricNames[metric]} / 年份</span>
                 {flightRecordsByYear.map(
                     (flightYearGroup: FlightYearGroup): ReactElement => (
                         <strong className="flight-aircraft-chart__year" key={flightYearGroup.year}>
@@ -254,21 +234,21 @@ const FlightRecordsAircraftChart = (): ReactElement => (
                         </strong>
                     ),
                 )}
-                {ALL_AIRCRAFT_TYPES.flatMap(
-                    (aircraft: string): ReactElement[] => [
-                        <strong className="flight-aircraft-chart__label" key={`label-${aircraft}`}>
-                            {aircraft}
+                {metricValues.flatMap(
+                    (value): ReactElement[] => [
+                        <strong className="flight-aircraft-chart__label" key={`label-${value}`}>
+                            {value}
                         </strong>,
                         ...flightRecordsByYear.map(
                             (flightYearGroup: FlightYearGroup): ReactElement => {
-                                const count = getAircraftCountForYear(flightYearGroup, aircraft);
+                                const count = countMetric(flightYearGroup, value);
 
                                 return (
                                     <span
                                         className="flight-aircraft-chart__cell"
-                                        key={`${flightYearGroup.year}-${aircraft}`}
-                                        style={{ opacity: count === 0 ? 0.35 : 0.35 + count / AIRCRAFT_CHART_MAX * 0.65 }}
-                                        title={`${flightYearGroup.year} 年 ${aircraft}：${count} 次`}
+                                        key={`${flightYearGroup.year}-${value}`}
+                                        style={{ opacity: count === 0 ? 0.35 : 0.35 + (count / maxMetricCount) * 0.65 }}
+                                        title={`${flightYearGroup.year} 年 ${value}：${count} 次`}
                                     >
                                         {count || "·"}
                                     </span>
@@ -280,7 +260,7 @@ const FlightRecordsAircraftChart = (): ReactElement => (
             </div>
         </div>
         <table className="sr-only">
-            <caption>各年份乘机机型及次数</caption>
+            <caption>各年份乘机{metricNames[metric]}及次数</caption>
             <thead>
                 <tr>
                     <th scope="col">年份</th>
@@ -291,14 +271,13 @@ const FlightRecordsAircraftChart = (): ReactElement => (
             <tbody>
                 {flightRecordsByYear.flatMap(
                     (flightYearGroup: FlightYearGroup): ReactElement[] =>
-                        countAircraftTypes(flightYearGroup.records).map(
-                            (aircraftType: AircraftTypeCount): ReactElement => (
+                        metricValues.map((value): ReactElement => (
                                 <tr
-                                    key={`aircraft-table-${flightYearGroup.year}-${aircraftType.aircraft}`}
+                                    key={`aircraft-table-${flightYearGroup.year}-${value}`}
                                 >
                                     <th scope="row">{flightYearGroup.year}</th>
-                                    <td>{aircraftType.aircraft}</td>
-                                    <td>{aircraftType.count}</td>
+                                    <td>{value}</td>
+                                    <td>{countMetric(flightYearGroup, value)}</td>
                                 </tr>
                             ),
                         ),
@@ -306,7 +285,8 @@ const FlightRecordsAircraftChart = (): ReactElement => (
             </tbody>
         </table>
     </section>
-);
+    );
+};
 
 /**
  * 个人档案乘机台账：按年份分组展示航司、机型、航线与日期。
