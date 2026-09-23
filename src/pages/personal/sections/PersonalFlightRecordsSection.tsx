@@ -10,8 +10,6 @@ import type {
     FlightRecord,
     FlightRouteSeparator,
 } from "../../../constants/type";
-import { CHECKED_AIRPORTS } from "../../../constants/external-links";
-import type { CheckedAirport } from "../../../constants/type";
 
 /** 单程路线连接符映射，供台账行内展示。 */
 const FLIGHT_ROUTE_SEPARATOR_LABEL: Record<FlightRouteSeparator, string> = {
@@ -92,20 +90,25 @@ const FLIGHT_RECORD_CHART_MAX = Math.max(
 
 type FlightChartMetric = "aircraft" | "airline" | "country";
 
-const getCountryForAirport = (airportName: string): string => {
-    const airport = CHECKED_AIRPORTS.find((candidate: CheckedAirport): boolean =>
-        airportName.startsWith(candidate.name.replace(/国际机场|机场$/, "")),
-    );
-    const match = airport?.description.match(
-        /^(中国|日本|泰国|西班牙|意大利|法国|摩洛哥|韩国|新加坡|澳大利亚)/,
-    );
-    return match?.[1] ?? "其他地区";
+/** 从航点的“国家/地区-地点”格式中提取国家或地区名称。 */
+const getCountryForRoutePoint = (routePoint: string): string => {
+    const separatorIndex = routePoint.indexOf("-");
+
+    if (separatorIndex <= 0) {
+        return "其他地区";
+    }
+
+    const countryName = routePoint.slice(0, separatorIndex).trim();
+    return countryName || "其他地区";
 };
 
 const getMetricValues = (record: FlightRecord, metric: FlightChartMetric): string[] => {
     if (metric === "aircraft") return [record.aircraft];
     if (metric === "airline") return [record.airline];
-    return [getCountryForAirport(record.origin), getCountryForAirport(record.destination)];
+    return [
+        getCountryForRoutePoint(record.origin),
+        getCountryForRoutePoint(record.destination),
+    ];
 };
 
 /** 乘机记录年度分布图，图形与文本数据保持同步。 */

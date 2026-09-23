@@ -9064,3 +9064,24 @@
 - `src/pages/personal/sections/PersonalFlightRecordsSection.tsx`：新增年度机型统计与可视化组件。
 - `src/pages/personal/index.css`：新增年度机型图表样式及移动端适配。
 - `taskRecord.md`：追加本次图表功能记录。
+
+---
+
+## 日期
+
+2026-09-23
+
+## 任务目的
+
+修正乘机记录按国家或地区统计时的分组来源，使其直接使用航线数据中的国家/地区前缀。
+
+## 完成过程
+
+1. 移除基于机场打卡数据反查国家/地区的逻辑。
+2. 按 `origin` 和 `destination` 字段首个 `-` 前的内容提取国家或地区名称。
+3. 对缺少分隔符或国家前缀为空的异常数据统一归入“其他地区”。
+
+## 修改具体文件
+
+- `src/pages/personal/sections/PersonalFlightRecordsSection.tsx`：按航点字符串的国家/地区前缀统计国家维度。
+- `taskRecord.md`：追加本次国家/地区统计修正记录。
