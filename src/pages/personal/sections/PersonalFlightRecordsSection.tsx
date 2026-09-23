@@ -102,7 +102,10 @@ const getCountryForRoutePoint = (routePoint: string): string => {
     return countryName || "其他地区";
 };
 
-const getMetricValues = (record: FlightRecord, metric: FlightChartMetric): string[] => {
+const getMetricValues = (
+    record: FlightRecord,
+    metric: FlightChartMetric,
+): string[] => {
     if (metric === "aircraft") return [record.aircraft];
     if (metric === "airline") return [record.airline];
     return [
@@ -186,60 +189,96 @@ const FlightRecordsAircraftChart = (): ReactElement => {
         airline: "航司",
         country: "国家或地区",
     };
-    const metricValues = Array.from(
+    let metricValues = Array.from(
         new Set(
             flightRecordsByYear.flatMap((group) =>
                 group.records.flatMap((record) => getMetricValues(record, metric)),
             ),
         ),
-    );
+    )
+    if (metric === "aircraft") {
+        metricValues = metricValues.sort((a, b) => {
+            const _A = a[0];
+            const _B = b[0];
+            if (_A === _B) {
+                return Number(a[1]) - Number(b[1]);
+            }
+            return Number(_A) - Number(_B);
+        });
+    }
+
     const countMetric = (group: FlightYearGroup, value: string): number =>
         group.records.reduce(
             (total, record) =>
-                total + getMetricValues(record, metric).filter((item) => item === value).length,
+                total +
+                getMetricValues(record, metric).filter((item) => item === value).length,
             0,
         );
     const maxMetricCount = Math.max(
-        ...flightRecordsByYear.flatMap((group) => metricValues.map((value) => countMetric(group, value))),
+        ...flightRecordsByYear.flatMap((group) =>
+            metricValues.map((value) => countMetric(group, value)),
+        ),
         1,
     );
 
     return (
-    <section
-        className="flight-aircraft-chart"
-        aria-labelledby="flight-aircraft-chart-title"
-    >
-        <div className="flight-records-chart__header">
-            <div>
-                <p className="personal-section__eyebrow">Annual mix</p>
-                <h3 id="flight-aircraft-chart-title">每年{metricNames[metric]}概览</h3>
+        <section
+            className="flight-aircraft-chart"
+            aria-labelledby="flight-aircraft-chart-title"
+        >
+            <div className="flight-records-chart__header">
+                <div>
+                    <p className="personal-section__eyebrow">Annual mix</p>
+                    <h3 id="flight-aircraft-chart-title">
+                        每年{metricNames[metric]}概览
+                    </h3>
+                </div>
+                <div
+                    className="flight-aircraft-chart__switcher"
+                    role="group"
+                    aria-label="切换统计维度"
+                >
+                    {(Object.keys(metricNames) as FlightChartMetric[]).map((option) => (
+                        <button
+                            type="button"
+                            key={option}
+                            aria-pressed={metric === option}
+                            onClick={() => setMetric(option)}
+                        >
+                            {metricNames[option]}
+                        </button>
+                    ))}
+                </div>
             </div>
-            <div className="flight-aircraft-chart__switcher" role="group" aria-label="切换统计维度">
-                {(Object.keys(metricNames) as FlightChartMetric[]).map((option) => (
-                    <button type="button" key={option} aria-pressed={metric === option} onClick={() => setMetric(option)}>
-                        {metricNames[option]}
-                    </button>
-                ))}
-            </div>
-        </div>
-        <div className="flight-aircraft-chart__scroll" role="img" aria-label="按年份统计的乘机机型热力图">
             <div
-                className="flight-aircraft-chart__grid"
-                style={{
-                    gridTemplateColumns: `minmax(6.5rem, 8.5rem) repeat(${flightRecordsByYear.length}, minmax(3.6rem, 1fr))`,
-                }}
+                className="flight-aircraft-chart__scroll"
+                role="img"
+                aria-label="按年份统计的乘机机型热力图"
             >
-                <span className="flight-aircraft-chart__corner">{metricNames[metric]} / 年份</span>
-                {flightRecordsByYear.map(
-                    (flightYearGroup: FlightYearGroup): ReactElement => (
-                        <strong className="flight-aircraft-chart__year" key={flightYearGroup.year}>
-                            {flightYearGroup.year}
-                        </strong>
-                    ),
-                )}
-                {metricValues.flatMap(
-                    (value): ReactElement[] => [
-                        <strong className="flight-aircraft-chart__label" key={`label-${value}`}>
+                <div
+                    className="flight-aircraft-chart__grid"
+                    style={{
+                        gridTemplateColumns: `minmax(6.5rem, 8.5rem) repeat(${flightRecordsByYear.length}, minmax(3.6rem, 1fr))`,
+                    }}
+                >
+                    <span className="flight-aircraft-chart__corner">
+                        {metricNames[metric]} / 年份
+                    </span>
+                    {flightRecordsByYear.map(
+                        (flightYearGroup: FlightYearGroup): ReactElement => (
+                            <strong
+                                className="flight-aircraft-chart__year"
+                                key={flightYearGroup.year}
+                            >
+                                {flightYearGroup.year}
+                            </strong>
+                        ),
+                    )}
+                    {metricValues.flatMap((value): ReactElement[] => [
+                        <strong
+                            className="flight-aircraft-chart__label"
+                            key={`label-${value}`}
+                        >
                             {value}
                         </strong>,
                         ...flightRecordsByYear.map(
@@ -250,7 +289,12 @@ const FlightRecordsAircraftChart = (): ReactElement => {
                                     <span
                                         className="flight-aircraft-chart__cell"
                                         key={`${flightYearGroup.year}-${value}`}
-                                        style={{ opacity: count === 0 ? 0.35 : 0.35 + (count / maxMetricCount) * 0.65 }}
+                                        style={{
+                                            opacity:
+                                                count === 0
+                                                    ? 0.35
+                                                    : 0.35 + (count / maxMetricCount) * 0.65,
+                                        }}
                                         title={`${flightYearGroup.year} 年 ${value}：${count} 次`}
                                     >
                                         {count || "·"}
@@ -258,36 +302,34 @@ const FlightRecordsAircraftChart = (): ReactElement => {
                                 );
                             },
                         ),
-                    ],
-                )}
+                    ])}
+                </div>
             </div>
-        </div>
-        <table className="sr-only">
-            <caption>各年份乘机{metricNames[metric]}及次数</caption>
-            <thead>
-                <tr>
-                    <th scope="col">年份</th>
-                    <th scope="col">机型</th>
-                    <th scope="col">次数</th>
-                </tr>
-            </thead>
-            <tbody>
-                {flightRecordsByYear.flatMap(
-                    (flightYearGroup: FlightYearGroup): ReactElement[] =>
-                        metricValues.map((value): ReactElement => (
-                                <tr
-                                    key={`aircraft-table-${flightYearGroup.year}-${value}`}
-                                >
-                                    <th scope="row">{flightYearGroup.year}</th>
-                                    <td>{value}</td>
-                                    <td>{countMetric(flightYearGroup, value)}</td>
-                                </tr>
+            <table className="sr-only">
+                <caption>各年份乘机{metricNames[metric]}及次数</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">年份</th>
+                        <th scope="col">机型</th>
+                        <th scope="col">次数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {flightRecordsByYear.flatMap(
+                        (flightYearGroup: FlightYearGroup): ReactElement[] =>
+                            metricValues.map(
+                                (value): ReactElement => (
+                                    <tr key={`aircraft-table-${flightYearGroup.year}-${value}`}>
+                                        <th scope="row">{flightYearGroup.year}</th>
+                                        <td>{value}</td>
+                                        <td>{countMetric(flightYearGroup, value)}</td>
+                                    </tr>
+                                ),
                             ),
-                        ),
-                )}
-            </tbody>
-        </table>
-    </section>
+                    )}
+                </tbody>
+            </table>
+        </section>
     );
 };
 
@@ -303,12 +345,8 @@ const PersonalFlightRecordsSection = (): ReactElement => {
     // 手风琴切换：同一时刻仅保留一个展开年份，再次点击已展开项则折叠。
     const toggleFlightYear = (flightYear: number): void => {
         setExpandedFlightYear(
-            (
-                currentExpandedFlightYear: number | undefined,
-            ): number | undefined =>
-                currentExpandedFlightYear === flightYear
-                    ? undefined
-                    : flightYear,
+            (currentExpandedFlightYear: number | undefined): number | undefined =>
+                currentExpandedFlightYear === flightYear ? undefined : flightYear,
         );
     };
 
@@ -323,10 +361,7 @@ const PersonalFlightRecordsSection = (): ReactElement => {
             </div>
 
             <div className="flight-ledger">
-                <div
-                    className="flight-ledger__toolbar"
-                    aria-label="乘机记录统计"
-                >
+                <div className="flight-ledger__toolbar" aria-label="乘机记录统计">
                     <div className="flight-ledger__stats">
                         <span>
                             <strong>{FLIGHT_RECORD_COUNT}</strong>
@@ -366,9 +401,7 @@ const PersonalFlightRecordsSection = (): ReactElement => {
                                             aria-controls={flightYearPanelId}
                                             aria-expanded={isFlightYearExpanded}
                                             onClick={(): void =>
-                                                toggleFlightYear(
-                                                    flightYearGroup.year,
-                                                )
+                                                toggleFlightYear(flightYearGroup.year)
                                             }
                                         >
                                             <span
@@ -378,8 +411,7 @@ const PersonalFlightRecordsSection = (): ReactElement => {
                                                 {flightYearGroup.year}
                                             </span>
                                             <span className="flight-year-block__meta">
-                                                {flightYearGroup.records.length}{" "}
-                                                次
+                                                {flightYearGroup.records.length} 次
                                             </span>
                                             <span
                                                 className="flight-year-block__indicator"
@@ -399,10 +431,9 @@ const PersonalFlightRecordsSection = (): ReactElement => {
                                                     flightRecord: FlightRecord,
                                                     flightRecordIndex: number,
                                                 ): ReactElement => {
-                                                    const isPending =
-                                                        isPendingFlight(
-                                                            flightRecord.departureDate,
-                                                        );
+                                                    const isPending = isPendingFlight(
+                                                        flightRecord.departureDate,
+                                                    );
 
                                                     return (
                                                         <li
@@ -412,9 +443,7 @@ const PersonalFlightRecordsSection = (): ReactElement => {
                                                             <div className="flight-ledger-row__identity">
                                                                 <div className="flight-ledger-row__airline-group">
                                                                     <span className="flight-ledger-row__airline">
-                                                                        {
-                                                                            flightRecord.airline
-                                                                        }
+                                                                        {flightRecord.airline}
                                                                     </span>
                                                                     {isPending ? (
                                                                         <span className="flight-ledger-row__status">
@@ -423,44 +452,32 @@ const PersonalFlightRecordsSection = (): ReactElement => {
                                                                     ) : null}
                                                                 </div>
                                                                 <span className="flight-ledger-row__aircraft">
-                                                                    {
-                                                                        flightRecord.aircraft
-                                                                    }
+                                                                    {flightRecord.aircraft}
                                                                 </span>
                                                             </div>
                                                             <div className="flight-ledger-row__route">
                                                                 <span className="flight-ledger-row__route-point">
-                                                                    {
-                                                                        flightRecord.origin
-                                                                    }
+                                                                    {flightRecord.origin}
                                                                 </span>
                                                                 <span
                                                                     className="flight-ledger-row__route-connector"
                                                                     aria-hidden="true"
                                                                 >
-                                                                    {getFlightRouteSeparator(
-                                                                        flightRecord,
-                                                                    )}
+                                                                    {getFlightRouteSeparator(flightRecord)}
                                                                 </span>
                                                                 <span className="flight-ledger-row__route-point">
-                                                                    {
-                                                                        flightRecord.destination
-                                                                    }
+                                                                    {flightRecord.destination}
                                                                 </span>
                                                             </div>
                                                             <time
                                                                 className="flight-ledger-row__date"
-                                                                dateTime={
-                                                                    flightRecord.departureDate
-                                                                }
+                                                                dateTime={flightRecord.departureDate}
                                                             >
                                                                 <span className="flight-ledger-row__date-label">
                                                                     日期
                                                                 </span>
                                                                 <span className="flight-ledger-row__date-value">
-                                                                    {formatFlightDate(
-                                                                        flightRecord,
-                                                                    )}
+                                                                    {formatFlightDate(flightRecord)}
                                                                 </span>
                                                             </time>
                                                         </li>
