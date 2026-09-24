@@ -6,9 +6,9 @@ import {
 
 /** 模型目录组件的当前选择和回传回调。 */
 interface ModelDirProps {
-    /** 当前页面选中的模型 ID，用于同步 active 状态。 */
-    selectedModelId: string;
-    /** 用户点击目录模型后通知父页面切换当前模型。 */
+    /** 当前页面选中的模型 ID，用于同步多选 active 状态。 */
+    selectedModelIds: readonly string[];
+    /** 用户点击目录模型后通知父页面切换选择状态。 */
     onModelSelection: (modelId: string) => void;
 }
 
@@ -48,6 +48,12 @@ const groupAssetsByDirectory = (
 
 const MODEL_DIRECTORY_GROUPS = groupAssetsByDirectory(AIRCRAFT_MODEL_ASSETS);
 
+/** 判断模型是否处于目录多选状态。 */
+const isModelSelected = (
+    selectedModelIds: readonly string[],
+    modelId: string,
+): boolean => selectedModelIds.includes(modelId);
+
 /** 在当前选中模型不在目录可视区域时，仅滚动目录容器以显示该条目。 */
 const scrollSelectedModelIntoView = (
     catalogList: HTMLDivElement,
@@ -81,11 +87,12 @@ const scrollSelectedModelIntoView = (
 
 /** 独立维护 GLB 模型目录的展示和选择交互。 */
 export const ModelDir = ({
-    selectedModelId,
+    selectedModelIds,
     onModelSelection,
 }: ModelDirProps): ReactElement => {
     const catalogListRef = useRef<HTMLDivElement | null>(null);
     const selectedModelButtonRef = useRef<HTMLButtonElement | null>(null);
+    const primarySelectedModelId = selectedModelIds[0] ?? "";
 
     /** 在刷新、历史导航或模型选择后保持当前条目处于目录可视区域。 */
     useEffect((): void => {
@@ -97,14 +104,16 @@ export const ModelDir = ({
         }
 
         scrollSelectedModelIntoView(catalogList, selectedModelButton);
-    }, [selectedModelId]);
+    }, [primarySelectedModelId]);
 
     return (
         <aside className="plane-render__catalog" aria-label="模型目录">
             <div className="plane-render__catalog-heading">
                 <div>
                     <p className="plane-render__catalog-label">模型目录</p>
-                    <h2>{AIRCRAFT_MODEL_ASSETS.length} 个 GLB 文件</h2>
+                    <h2>
+                        {selectedModelIds.length} / {AIRCRAFT_MODEL_ASSETS.length} 个已选
+                    </h2>
                 </div>
             </div>
             <div
@@ -130,19 +139,24 @@ export const ModelDir = ({
                                         <button
                                             key={asset.id}
                                             ref={
-                                                selectedModelId === asset.id
+                                                primarySelectedModelId === asset.id
                                                     ? selectedModelButtonRef
                                                     : null
                                             }
-                                            className={`plane-render__model-button${selectedModelId === asset.id ? " plane-render__model-button--active" : ""}`}
+                                            className={`plane-render__model-button${isModelSelected(selectedModelIds, asset.id) ? " plane-render__model-button--active" : ""}`}
                                             type="button"
-                                            aria-pressed={
-                                                selectedModelId === asset.id
-                                            }
+                                            aria-pressed={isModelSelected(
+                                                selectedModelIds,
+                                                asset.id,
+                                            )}
                                             onClick={(): void =>
                                                 onModelSelection(asset.id)
                                             }
                                         >
+                                            <span
+                                                className="plane-render__model-selection-mark"
+                                                aria-hidden="true"
+                                            />
                                             <span>{asset.label}</span>
                                             {/* <small>{asset.sourcePath}</small> */}
                                         </button>

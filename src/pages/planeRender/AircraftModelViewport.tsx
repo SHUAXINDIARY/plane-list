@@ -28,11 +28,13 @@ import type {
     AircraftCamera,
     AircraftCameraHudState,
     AircraftCameraView,
+    AircraftModelDimension,
     AircraftModelLoadingProgress,
     AircraftModelViewportProps,
     AircraftProjectionMode,
     AircraftRenderSettings,
 } from "./viewport/types";
+import type { AircraftModelAsset } from "./modelAssets";
 import {
     applyModelSourceOrientation,
     normalizeAircraftModel,
@@ -94,11 +96,11 @@ export type { AircraftModelLoadingProgress } from "./viewport/types";
 /** 尚未建立相机和模型关系时不显示观察 HUD。 */
 const EMPTY_CAMERA_HUD_STATE: AircraftCameraHudState | null = null;
 /**
- * 使用 Three.js WebGPU 渲染器加载当前选择的单个 GLB 模型。
+ * 使用 Three.js WebGPU 渲染器加载并排列当前选择的多个 GLB 模型。
  */
 export const AircraftModelViewport = ({
-    asset,
-    selectedModelId,
+    assets,
+    selectedModelIds,
     onLoadingProgressChange,
     onModelSelection,
     fullscreenTargetRef,
@@ -118,6 +120,7 @@ export const AircraftModelViewport = ({
     const resizeRendererRef = useRef<(() => void) | null>(null);
     const aircraftModelRef = useRef<THREE.Object3D | null>(null);
     const aircraftAttitudePivotRef = useRef<THREE.Group | null>(null);
+    const loadedModelCountRef = useRef<number>(0);
     const displayFloorRef = useRef<THREE.Mesh | null>(null);
     const keyLightRef = useRef<THREE.DirectionalLight | null>(null);
     const lightingRigRef = useRef<AircraftLightingRig | null>(null);
@@ -364,7 +367,7 @@ export const AircraftModelViewport = ({
             const timeStamp = new Date().toISOString().replace(/[:.]/g, "-");
             downloadBlob(
                 blob,
-                `plane-${asset?.id ?? "model"}-${timeStamp}.png`,
+                `planes-${selectedModelIds.join("-") || "model"}-${timeStamp}.png`,
             );
         }, "image/png");
     };
@@ -382,7 +385,7 @@ export const AircraftModelViewport = ({
         setSnapshotError(null);
         const settings = {
             schemaVersion: 2,
-            modelId: asset?.id ?? null,
+            modelIds: selectedModelIds,
             camera: {
                 projectionMode,
                 view: cameraView,
@@ -403,7 +406,7 @@ export const AircraftModelViewport = ({
         });
         downloadBlob(
             settingsBlob,
-            `plane-${asset?.id ?? "model"}-settings.json`,
+            `planes-${selectedModelIds.join("-") || "model"}-settings.json`,
         );
     };
 
@@ -573,8 +576,9 @@ export const AircraftModelViewport = ({
             }
         };
 
-        /** 初始化 WebGPU 场景，再加载当前选择的单个模型。 */
+        /** 初始化 WebGPU 场景，再加载当前选择的多个模型。 */
         const initializeViewport = async (): Promise<void> => {
+            loadedModelCountRef.current = 0;
             animationPlayingRef.current = false;
             animationTimerRef.current.reset();
             setAnimationState(EMPTY_ANIMATION_STATE);
@@ -588,17 +592,21 @@ export const AircraftModelViewport = ({
                 phase: "initializing",
                 loadedModelCount: 0,
                 failedModelCount: 0,
+                totalModelCount: assets.length,
                 rendererStatus: "initializing",
                 loadingStage: "renderer",
+                modelDimensions: [],
             });
 
-            if (asset === undefined) {
+            if (assets.length === 0) {
                 publishProgress({
                     phase: "error",
                     loadedModelCount: 0,
                     failedModelCount: 0,
+                    totalModelCount: 0,
                     rendererStatus: "unavailable",
                     message: EMPTY_MODEL_DIRECTORY_MESSAGE,
+                    modelDimensions: [],
                 });
                 return;
             }
@@ -608,8 +616,10 @@ export const AircraftModelViewport = ({
                     phase: "error",
                     loadedModelCount: 0,
                     failedModelCount: 0,
+                    totalModelCount: assets.length,
                     rendererStatus: "unavailable",
                     message: WEBGPU_UNAVAILABLE_MESSAGE,
+                    modelDimensions: [],
                 });
                 return;
             }
@@ -623,8 +633,10 @@ export const AircraftModelViewport = ({
                     phase: "error",
                     loadedModelCount: 0,
                     failedModelCount: 0,
+                    totalModelCount: assets.length,
                     rendererStatus: "unavailable",
                     message: WEBGPU_INITIALIZATION_ERROR_MESSAGE,
+                    modelDimensions: [],
                 });
                 return;
             }
@@ -642,10 +654,12 @@ export const AircraftModelViewport = ({
                 renderLoopHandle?.cleanup();
                 publishProgress({
                     phase: "error",
-                    loadedModelCount: aircraftModelRef.current === null ? 0 : 1,
+                    loadedModelCount: loadedModelCountRef.current,
                     failedModelCount: 0,
+                    totalModelCount: assets.length,
                     rendererStatus: "lost",
                     message: WEBGPU_DEVICE_LOST_MESSAGE,
+                    modelDimensions: [],
                 });
                 animationPlayingRef.current = false;
                 setAnimationState(
@@ -966,88 +980,172 @@ export const AircraftModelViewport = ({
                 phase: "loading",
                 loadedModelCount: 0,
                 failedModelCount: 0,
+                totalModelCount: assets.length,
                 rendererStatus: "webgpu",
                 loadingStage: "downloading",
                 progressRatio: 0,
+                modelDimensions: [],
             });
 
             let loadedModelCount = 0;
             let failedModelCount = 0;
+            const loadedEntries: Array<{
+                asset: AircraftModelAsset;
+                model: THREE.Object3D;
+                animations: THREE.AnimationClip[];
+            }> = [];
 
-            try {
-                const modelUrl = await asset.loadUrl();
-                const gltf = await gltfLoader.loadAsync(
-                    modelUrl,
-                    (event: ProgressEvent): void => {
-                        publishProgress({
-                            phase: "loading",
-                            loadedModelCount: 0,
-                            failedModelCount: 0,
-                            rendererStatus: "webgpu",
-                            loadingStage: "downloading",
-                            progressRatio:
-                                event.lengthComputable && event.total > 0
-                                    ? event.loaded / event.total
-                                    : undefined,
-                        });
-                    },
-                );
+            // 逐个下载并解析，保留部分成功结果，让一个损坏资源不会阻断其他机型对比。
+            for (const asset of assets) {
+                try {
+                    const modelUrl = await asset.loadUrl();
+                    const gltf = await gltfLoader.loadAsync(
+                        modelUrl,
+                        (event: ProgressEvent): void => {
+                            publishProgress({
+                                phase: "loading",
+                                loadedModelCount,
+                                failedModelCount,
+                                totalModelCount: assets.length,
+                                rendererStatus: "webgpu",
+                                loadingStage: "downloading",
+                                progressRatio:
+                                    event.lengthComputable && event.total > 0
+                                        ? event.loaded / event.total
+                                        : undefined,
+                                modelDimensions: [],
+                            });
+                        },
+                    );
 
-                if (isDisposed) {
-                    disposeSceneResources(gltf.scene);
-                    return;
-                }
+                    if (isDisposed) {
+                        disposeSceneResources(gltf.scene);
+                        return;
+                    }
 
-                publishProgress({
-                    phase: "loading",
-                    loadedModelCount: 0,
-                    failedModelCount: 0,
-                    rendererStatus: "webgpu",
-                    loadingStage: "parsing",
-                });
-
-                const model = gltf.scene;
-                normalizeAircraftModel(model);
-                applyModelSourceOrientation(model, asset.sourcePath);
-
-                const aircraftAttitudePivot = new THREE.Group();
-                aircraftAttitudePivot.add(model);
-                scene.add(aircraftAttitudePivot);
-                aircraftModelRef.current = model;
-                aircraftAttitudePivotRef.current = aircraftAttitudePivot;
-                const normalizedBounds = new THREE.Box3().setFromObject(model);
-                displayFloor.position.y = normalizedBounds.min.y - 0.015;
-
-                const animationClip = gltf.animations[0];
-                if (animationClip !== undefined && animationClip.duration > 0) {
-                    const animationMixer = new THREE.AnimationMixer(model);
-                    const animationAction =
-                        animationMixer.clipAction(animationClip);
-
-                    animationAction.play();
-                    animationAction.paused = true;
-                    animationMixerRef.current = animationMixer;
-                    animationActionRef.current = animationAction;
-                    setAnimationState({
-                        available: true,
-                        name:
-                            animationClip.name || DEFAULT_MODEL_ANIMATION_NAME,
-                        duration: animationClip.duration,
-                        currentTime: 0,
-                        isPlaying: false,
+                    loadedEntries.push({
+                        asset,
+                        model: gltf.scene,
+                        animations: gltf.animations,
                     });
+                    loadedModelCount += 1;
+                    loadedModelCountRef.current = loadedModelCount;
+                    publishProgress({
+                        phase: "loading",
+                        loadedModelCount,
+                        failedModelCount,
+                        totalModelCount: assets.length,
+                        rendererStatus: "webgpu",
+                        loadingStage: "parsing",
+                        modelDimensions: [],
+                    });
+                } catch {
+                    failedModelCount += 1;
                 }
+            }
 
+            if (isDisposed) {
+                loadedEntries.forEach((entry): void => {
+                    disposeSceneResources(entry.model);
+                });
+                return;
+            }
+
+            const comparisonPivot = new THREE.Group();
+            const sourceDimensions = new Map<string, THREE.Vector3>();
+            let referenceLargestDimension = 0;
+
+            loadedEntries.forEach((entry): void => {
+                applyModelSourceOrientation(entry.model, entry.asset.sourcePath);
+                const sourceBounds = new THREE.Box3().setFromObject(entry.model);
+                const sourceSize = sourceBounds.getSize(new THREE.Vector3());
+                sourceDimensions.set(entry.asset.id, sourceSize);
+                referenceLargestDimension = Math.max(
+                    referenceLargestDimension,
+                    sourceSize.x,
+                    sourceSize.y,
+                    sourceSize.z,
+                );
+            });
+
+            const normalizedEntries = loadedEntries.map((entry) => {
+                const sourceSize = sourceDimensions.get(entry.asset.id);
+                const model = entry.model;
+                normalizeAircraftModel(model, referenceLargestDimension);
+                const wrapper = new THREE.Group();
+                wrapper.add(model);
+                const normalizedBounds = new THREE.Box3().setFromObject(model);
+
+                return {
+                    ...entry,
+                    wrapper,
+                    normalizedWidth: normalizedBounds.getSize(new THREE.Vector3()).x,
+                    normalizedMinY: normalizedBounds.min.y,
+                    sourceSize: sourceSize ?? new THREE.Vector3(),
+                };
+            });
+
+            const comparisonGap = 0.24;
+            const totalWidth = normalizedEntries.reduce(
+                (sum: number, entry): number => sum + entry.normalizedWidth,
+                Math.max(normalizedEntries.length - 1, 0) * comparisonGap,
+            );
+            let currentX = -totalWidth / 2;
+            let minimumY = 0;
+            const modelDimensions: AircraftModelDimension[] = [];
+
+            normalizedEntries.forEach((entry): void => {
+                entry.wrapper.position.x = currentX + entry.normalizedWidth / 2;
+                currentX += entry.normalizedWidth + comparisonGap;
+                minimumY = Math.min(minimumY, entry.normalizedMinY);
+                comparisonPivot.add(entry.wrapper);
+                modelDimensions.push({
+                    modelId: entry.asset.id,
+                    label: entry.asset.label,
+                    width: entry.sourceSize.x,
+                    height: entry.sourceSize.y,
+                    length: entry.sourceSize.z,
+                });
+            });
+
+            if (loadedModelCount > 0) {
+                scene.add(comparisonPivot);
+                aircraftModelRef.current = normalizedEntries[0]?.model ?? null;
+                aircraftAttitudePivotRef.current = comparisonPivot;
+                displayFloor.position.y = minimumY - 0.015;
+            }
+
+            const firstEntry = normalizedEntries[0];
+            const animationClip = firstEntry?.animations[0];
+            if (
+                firstEntry !== undefined &&
+                animationClip !== undefined &&
+                animationClip.duration > 0
+            ) {
+                const animationMixer = new THREE.AnimationMixer(firstEntry.model);
+                const animationAction = animationMixer.clipAction(animationClip);
+
+                animationAction.play();
+                animationAction.paused = true;
+                animationMixerRef.current = animationMixer;
+                animationActionRef.current = animationAction;
+                setAnimationState({
+                    available: true,
+                    name: animationClip.name || DEFAULT_MODEL_ANIMATION_NAME,
+                    duration: animationClip.duration,
+                    currentTime: 0,
+                    isPlaying: false,
+                });
+            }
+
+            if (loadedModelCount > 0) {
                 isApplyingCameraViewRef.current = true;
-                focusModel(camera, controls, aircraftAttitudePivot);
+                focusModel(camera, controls, comparisonPivot);
                 setCameraView("fit");
                 isApplyingCameraViewRef.current = false;
                 updateCameraHud();
                 requestRenderRef.current?.();
                 setIsSnapshotAvailable(true);
-                loadedModelCount = 1;
-            } catch {
-                failedModelCount = 1;
             }
 
             if (isDisposed) {
@@ -1058,11 +1156,13 @@ export const AircraftModelViewport = ({
                 phase: loadedModelCount > 0 ? "ready" : "error",
                 loadedModelCount,
                 failedModelCount,
+                totalModelCount: assets.length,
                 rendererStatus: "webgpu",
                 message:
                     loadedModelCount > 0
                         ? undefined
                         : CURRENT_MODEL_FAILED_MESSAGE,
+                modelDimensions: loadedModelCount > 0 ? modelDimensions : [],
             });
         };
 
@@ -1072,7 +1172,7 @@ export const AircraftModelViewport = ({
             isDisposed = true;
             cleanupRenderer?.();
         };
-    }, [asset, onLoadingProgressChange, retryToken]);
+    }, [assets, onLoadingProgressChange, retryToken]);
 
     return (
         <div
@@ -1143,7 +1243,7 @@ export const AircraftModelViewport = ({
                 isFullscreen={isFullscreen}
                 isModelDirectoryOpen={isModelDirectoryOpen}
                 modelDirectoryId={modelDirectoryId}
-                selectedModelId={selectedModelId}
+                selectedModelIds={selectedModelIds}
                 onModelSelection={handleFullscreenModelSelection}
                 cameraHudState={cameraHudState}
                 animationState={animationState}

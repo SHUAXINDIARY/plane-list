@@ -47,13 +47,19 @@ export const disposeSceneResources = (objectRoot: THREE.Object3D): void => {
 };
 
 /** 将模型归一化到统一尺寸，并将几何中心移至姿态旋转原点。 */
-export const normalizeAircraftModel = (model: THREE.Object3D): void => {
+export const normalizeAircraftModel = (
+    model: THREE.Object3D,
+    referenceLargestDimension?: number,
+): THREE.Vector3 => {
     const sourceBounds = new THREE.Box3().setFromObject(model);
     const sourceSize = sourceBounds.getSize(new THREE.Vector3());
     const largestDimension = Math.max(sourceSize.x, sourceSize.y, sourceSize.z);
 
     if (largestDimension > 0) {
-        model.scale.setScalar(NORMALIZED_MODEL_MAX_SIZE / largestDimension);
+        model.scale.setScalar(
+            NORMALIZED_MODEL_MAX_SIZE /
+                (referenceLargestDimension ?? largestDimension),
+        );
     }
 
     const normalizedBounds = new THREE.Box3().setFromObject(model);
@@ -66,4 +72,6 @@ export const normalizeAircraftModel = (model: THREE.Object3D): void => {
             object.receiveShadow = true;
         }
     });
+
+    return sourceSize;
 };

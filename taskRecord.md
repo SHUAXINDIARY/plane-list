@@ -9171,3 +9171,31 @@
 - `src/pages/personal/sections/PersonalAirportSection.tsx`：新增自转状态、开关控件并传递给三维地球。
 - `src/pages/personal/index.css`：新增自转开关样式与减少动态偏好适配。
 - `taskRecord.md`：追加本次地球自转开关记录。
+
+---
+
+## 日期
+
+2026-09-24
+
+## 任务目的
+
+扩展飞机模型渲染页，支持选择多个机型在同一视窗中按比例渲染，并展示尺寸对比。
+
+## 完成过程
+
+1. 将模型选择从单个 ID 扩展为 URL 持久化的多选 ID 列表，同时兼容旧的 `model` 查询参数。
+2. 将模型目录按钮改为可切换的多选状态，保留键盘操作、焦点反馈和全屏目录同步。
+3. 扩展 WebGPU 视窗加载流程，逐个加载选中 GLB，按共同最大尺寸保持相对比例并横向排列。
+4. 从模型原始包围盒生成长、宽、高尺寸表，并同步加载进度、失败数量和导出文件名。
+5. 执行 TypeScript 类型检查，发现一个改动前已存在的 `ViewportNavigationControls.tsx` 未使用参数告警；按用户要求未构建或启动服务器。
+
+## 修改具体文件
+
+- `src/pages/planeRender/index.tsx`：多选 URL 状态、尺寸对比表和多模型状态文案。
+- `src/pages/planeRender/ModelDir.tsx`：目录多选交互与选中标记。
+- `src/pages/planeRender/index.css`：多选标记与尺寸表样式。
+- `src/pages/planeRender/AircraftModelViewport.tsx`：多模型加载、比例排列、尺寸采集和导出信息。
+- `src/pages/planeRender/viewport/types.ts`：多模型 props、加载进度和尺寸类型。
+- `src/pages/planeRender/viewport/aircraft/model.ts`：支持按共同参考尺寸归一化模型。
+- `src/pages/planeRender/viewport/components/ViewportOverlays.tsx`：全屏目录传递多选状态。

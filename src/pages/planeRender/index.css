@@ -1363,6 +1363,23 @@
     white-space: normal;
 }
 
+.plane-render__model-selection-mark {
+    width: 0.76rem !important;
+    min-width: 0.76rem;
+    height: 0.76rem;
+    min-height: 0.76rem !important;
+    margin-bottom: 0.1rem;
+    border: 1px solid var(--pl-border-muted);
+    border-radius: 0.22rem;
+    background-color: transparent;
+}
+
+.plane-render__model-button--active .plane-render__model-selection-mark {
+    background-color: var(--pl-accent);
+    border-color: var(--pl-accent);
+    box-shadow: inset 0 0 0 0.16rem var(--pl-nav-active-bg);
+}
+
 .plane-render__model-button small {
     display: block;
     width: 100%;
@@ -1432,6 +1449,64 @@
     color: var(--pl-error-text);
     font-size: 0.84rem;
     font-weight: 650;
+}
+
+.plane-render__dimensions {
+    margin-top: 1rem;
+    padding: 1rem 1.15rem;
+    background-color: var(--pl-surface-toolbar);
+    border: 1px solid var(--pl-border-divider);
+    border-radius: 1rem;
+}
+
+.plane-render__dimensions-heading h2 {
+    margin: 0.3rem 0 0;
+    color: var(--pl-text-heading);
+    font-family: var(--pl-font-display);
+    font-size: 1.05rem;
+    line-height: 1.25;
+}
+
+.plane-render__dimensions-table-wrap {
+    overflow-x: auto;
+    margin-top: 0.8rem;
+}
+
+.plane-render__dimensions-table {
+    width: 100%;
+    min-width: 32rem;
+    border-collapse: collapse;
+    color: var(--pl-text-data);
+    font-family: var(--pl-font-mono);
+    font-size: 0.78rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.plane-render__dimensions-table th,
+.plane-render__dimensions-table td {
+    padding: 0.52rem 0.48rem;
+    border-top: 1px solid var(--pl-border-divider);
+    text-align: right;
+}
+
+.plane-render__dimensions-table th:first-child,
+.plane-render__dimensions-table td:first-child {
+    max-width: 16rem;
+    overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.plane-render__dimensions-table thead th {
+    color: var(--pl-text-meta);
+    font-size: 0.7rem;
+    font-weight: 750;
+}
+
+.plane-render__dimensions-table tbody th {
+    color: var(--pl-text-heading);
+    font-weight: 700;
 }
 
 .plane-render__attribution {

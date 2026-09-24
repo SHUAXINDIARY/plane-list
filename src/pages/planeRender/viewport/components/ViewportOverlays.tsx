@@ -16,8 +16,8 @@ export interface ViewportOverlaysProps {
     /** 模型目录按钮和面板使用的稳定 ID。 */
     modelDirectoryId: string;
     /** 当前页面选中的模型 ID。 */
-    selectedModelId: string;
-    /** 选择模型后通知页面切换资源。 */
+    selectedModelIds: readonly string[];
+    /** 选择模型后通知页面更新多选资源。 */
     onModelSelection: (modelId: string) => void;
     /** 当前相机 HUD 状态；未初始化时为空。 */
     cameraHudState: AircraftCameraHudState | null;
@@ -38,7 +38,7 @@ export const ViewportOverlays = ({
     isFullscreen,
     isModelDirectoryOpen,
     modelDirectoryId,
-    selectedModelId,
+    selectedModelIds,
     onModelSelection,
     cameraHudState,
     animationState,
@@ -54,7 +54,7 @@ export const ViewportOverlays = ({
                 className="plane-render__fullscreen-model-dir"
             >
                 <ModelDir
-                    selectedModelId={selectedModelId}
+                    selectedModelIds={selectedModelIds}
                     onModelSelection={onModelSelection}
                 />
             </div>

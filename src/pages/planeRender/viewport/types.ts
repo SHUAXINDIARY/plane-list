@@ -103,6 +103,8 @@ export interface AircraftModelLoadingProgress {
     loadedModelCount: number;
     /** 无法加载的模型数量。 */
     failedModelCount: number;
+    /** 当前选择的模型总数，用于让加载状态反映多选目录。 */
+    totalModelCount: number;
     /** 当前渲染后端状态，避免页面在错误时仍显示 WebGPU 已就绪。 */
     rendererStatus: AircraftRendererStatus;
     /** loading 阶段的细分步骤。 */
@@ -111,21 +113,37 @@ export interface AircraftModelLoadingProgress {
     progressRatio?: number;
     /** 初始化或全部加载失败时展示的具体原因。 */
     message?: string;
+    /** 已成功解析模型的原始包围盒尺寸。 */
+    modelDimensions: readonly AircraftModelDimension[];
+}
+
+/** 单架模型在 GLB 原始坐标中的包围盒尺寸，用于同场景比例比较。 */
+export interface AircraftModelDimension {
+    /** 对应目录资源的稳定模型 ID。 */
+    modelId: string;
+    /** 目录中展示的模型名称。 */
+    label: string;
+    /** 包围盒 X 轴尺寸，通常对应机翼展宽。 */
+    width: number;
+    /** 包围盒 Y 轴尺寸，通常对应机身高度。 */
+    height: number;
+    /** 包围盒 Z 轴尺寸，通常对应机身长度。 */
+    length: number;
 }
 
 /** 模型视窗的输入数据和对外状态回调。 */
 export interface AircraftModelViewportProps {
-    /** 当前需要加载并渲染的单个 GLB 模型资源。 */
-    asset: AircraftModelAsset | undefined;
+    /** 当前需要同时加载并渲染的 GLB 模型资源。 */
+    assets: readonly AircraftModelAsset[];
     /** 当前页面选中的模型 ID，用于同步全屏目录的 active 状态。 */
-    selectedModelId: string;
+    selectedModelIds: readonly string[];
     /** 向页面报告 WebGPU 初始化和模型加载进度。 */
     onLoadingProgressChange: (progress: AircraftModelLoadingProgress) => void;
     /** 从全屏目录选择模型后通知页面重新加载对应资源。 */
     onModelSelection: (modelId: string) => void;
     /** 页面级完整视窗元素，全屏时应包含画布、状态和元信息。 */
     fullscreenTargetRef: RefObject<HTMLElement | null>;
-    /** 当前模型重试序号，变化时强制重新初始化渲染器和资源请求。 */
+    /** 当前选中模型重试序号，变化时强制重新初始化渲染器和资源请求。 */
     retryToken: number;
 }
 
