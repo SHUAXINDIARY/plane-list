@@ -28,6 +28,27 @@ const TEXTURE_PATTERNS = Object.freeze({
     OCCLUSION: /(ambient|ao|occlusion)/iu,
     ROUGHNESS: /(roughness|metallic|specular|(?:^|[_-])r(?:[_-]|\.|$))/iu,
 });
+/** 330neo 导出的 OBJ 没有随附 MTL；这些部件名对应其四张独立贴图。 */
+const DIRECTORY_TEXTURE_PROFILES = Object.freeze([
+    Object.freeze({
+        requiredTextures: Object.freeze([
+            "tex_cabin.png",
+            "tex_cockpit.png",
+            "tex_delta.png",
+            "tex_seat_economy.png",
+        ]),
+        objectTextures: Object.freeze({
+            model_0: "tex_delta.png",
+            model_1: "tex_seat_economy.png",
+            model_2: "tex_seat_economy.png",
+            model_3: "tex_seat_economy.png",
+            model_4: "tex_cabin.png",
+            model_5: "tex_cockpit.png",
+            model_6: "tex_cabin.png",
+            model_7: "tex_delta.png",
+        }),
+    }),
+]);
 /** 可选参数默认值。输出文件默认使用输入目录名称。 */
 const DEFAULT_OPTIONS = Object.freeze({
     flipForward: "AUTO",
@@ -306,6 +327,25 @@ const selectTexture = (objPath, candidates, textureIndex, vertexCount) => {
     return namedMatch ?? candidates[fallbackIndex];
 };
 
+/** 在缺少 MTL 时按资源目录的已知部件命名恢复贴图归属。 */
+const selectProfileTexture = (objPath, imageFiles) => {
+    const availableNames = new Set(imageFiles.map((filePath) => basename(filePath).toLowerCase()));
+    const objectName = basename(objPath, EXTENSIONS.OBJ).toLowerCase();
+
+    for (const profile of DIRECTORY_TEXTURE_PROFILES) {
+        const hasProfileTextures = profile.requiredTextures.every((textureName) => availableNames.has(textureName));
+        const textureName = profile.objectTextures[objectName];
+
+        if (!hasProfileTextures || textureName === undefined) {
+            continue;
+        }
+
+        return imageFiles.find((filePath) => basename(filePath).toLowerCase() === textureName);
+    }
+
+    return undefined;
+};
+
 /** 为没有可用 MTL 的 OBJ 生成材料，并将可识别的贴图路径写入 MTL。 */
 const createGeneratedMaterial = (objPath, objectIndex, textureIndex, vertexCount, imageFiles, sourceBounds, hasUvs) => {
     const diffuseCandidates = imageFiles.filter((filePath) => {
@@ -319,7 +359,8 @@ const createGeneratedMaterial = (objPath, objectIndex, textureIndex, vertexCount
         return !TEXTURE_PATTERNS.OCCLUSION.test(fileName) && !TEXTURE_PATTERNS.NORMAL.test(fileName) && !TEXTURE_PATTERNS.ROUGHNESS.test(fileName);
     });
     const diffuseTexture = hasUvs
-        ? selectTexture(objPath, diffuseCandidates.length > 0 ? diffuseCandidates : fallbackDiffuseCandidates, textureIndex, vertexCount)
+        ? (selectProfileTexture(objPath, imageFiles)
+            ?? selectTexture(objPath, diffuseCandidates.length > 0 ? diffuseCandidates : fallbackDiffuseCandidates, textureIndex, vertexCount))
         : undefined;
     const matchingName = diffuseTexture === undefined ? "" : normalizeName(diffuseTexture);
     const findRelated = (pattern) => {
