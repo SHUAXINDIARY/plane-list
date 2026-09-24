@@ -9149,3 +9149,25 @@
 
 - `public/data/aircraft.json`：新增 A319SL、A320SL、A321SL 三条机型记录。
 - `taskRecord.md`：追加本次 SL 机型补充记录。
+
+---
+
+## 日期
+
+2026-09-24
+
+## 任务目的
+
+为三维地球增加控制是否自动自转的开关。
+
+## 完成过程
+
+1. 在机场足迹工具栏增加可访问的“地球自转”开关，普通视图与全屏视图保持同步。
+2. 通过状态引用实时更新 OrbitControls 的 `autoRotate`，切换时不重建地球场景或重置当前视角。
+
+## 修改具体文件
+
+- `src/pages/personal/sections/EarthMap.tsx`：接收自转状态并在渲染循环中同步 OrbitControls。
+- `src/pages/personal/sections/PersonalAirportSection.tsx`：新增自转状态、开关控件并传递给三维地球。
+- `src/pages/personal/index.css`：新增自转开关样式与减少动态偏好适配。
+- `taskRecord.md`：追加本次地球自转开关记录。

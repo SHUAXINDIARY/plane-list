@@ -25,6 +25,8 @@ interface EarthMapProps {
     ariaLabel: string;
     /** 用户要求优先尝试的三维渲染引擎。 */
     renderEngine: EarthRenderEngine;
+    /** 是否在空闲时持续旋转地球。 */
+    autoRotate: boolean;
     /** 渲染器完成初始化后，向父级报告实际启用的引擎。 */
     onRendererReady: (renderEngine: EarthRenderEngine) => void;
 }
@@ -636,10 +638,12 @@ const EarthMap = ({
     routes,
     ariaLabel,
     renderEngine,
+    autoRotate,
     onRendererReady,
 }: EarthMapProps): ReactElement => {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const hoveredMarkerIdRef = useRef<string | null>(null);
+    const autoRotateRef = useRef<boolean>(autoRotate);
     const [hoveredMarker, setHoveredMarker] = useState<EarthMarkerTooltip | null>(
         null,
     );
@@ -660,6 +664,10 @@ const EarthMap = ({
 
         return (): void => themeObserver.disconnect();
     }, []);
+
+    useEffect((): void => {
+        autoRotateRef.current = autoRotate;
+    }, [autoRotate]);
 
     useEffect((): (() => void) | undefined => {
         const container = containerRef.current;
@@ -714,7 +722,7 @@ const EarthMap = ({
             controls.maxDistance = 10;
             controls.target.set(0, 0, 0);
             controls.update();
-            controls.autoRotate = true;
+            controls.autoRotate = autoRotateRef.current;
             controls.autoRotateSpeed = GLOBE_AUTO_ROTATE_SPEED;
 
             globeGroup.rotation.y = INITIAL_GLOBE_YAW;
@@ -900,6 +908,7 @@ const EarthMap = ({
 
             const renderFrame = (): void => {
                 animationTimer.update();
+                controls.autoRotate = autoRotateRef.current;
                 controls.update(animationTimer.getDelta());
                 updateMarkerScreenScales();
                 renderer.render(scene, camera);

@@ -44,6 +44,8 @@ const PersonalAirportSection = (): ReactElement => {
     /** 用户为三维地球选择的渲染引擎，切换后会重建地球场景。 */
     const [earthRenderEngine, setEarthRenderEngine] =
         useState<EarthRenderEngine>("webgpu");
+    /** 是否允许三维地球在用户未操作时持续自转。 */
+    const [isEarthAutoRotate, setIsEarthAutoRotate] = useState<boolean>(true);
     /** 当前地球实例实际启用的渲染引擎，初始化期间暂不显示具体后端。 */
     const [activeEarthRenderEngine, setActiveEarthRenderEngine] = useState<
         EarthRenderEngine | undefined
@@ -120,6 +122,13 @@ const PersonalAirportSection = (): ReactElement => {
 
         setActiveEarthRenderEngine(undefined);
         setEarthRenderEngine(nextEarthRenderEngine);
+    };
+
+    /** 切换三维地球的空闲自转，不重建当前地球场景。 */
+    const toggleEarthAutoRotate = (): void => {
+        setIsEarthAutoRotate(
+            (currentIsEarthAutoRotate: boolean): boolean => !currentIsEarthAutoRotate,
+        );
     };
 
     /** 接收 EarthMap 初始化完成后的实际渲染后端，用于展示 WebGPU 回退状态。 */
@@ -224,6 +233,34 @@ const PersonalAirportSection = (): ReactElement => {
         );
     };
 
+    /** 在三维地球模式下提供可访问的自转开关。 */
+    const renderEarthAutoRotateToggle = (): ReactElement | null => {
+        if (visualizationMode !== "earth") {
+            return null;
+        }
+
+        return (
+            <label className="airport-earth-motion-toggle">
+                <span className="airport-earth-motion-toggle__label">
+                    地球自转
+                </span>
+                <input
+                    type="checkbox"
+                    role="switch"
+                    checked={isEarthAutoRotate}
+                    aria-label="地球自转"
+                    onChange={toggleEarthAutoRotate}
+                />
+                <span
+                    className="airport-earth-motion-toggle__track"
+                    aria-hidden="true"
+                >
+                    <span className="airport-earth-motion-toggle__thumb" />
+                </span>
+            </label>
+        );
+    };
+
     /** 根据展示位置渲染进入全屏或退出全屏的控制按钮。 */
     const renderFullscreenToggle = (
         isFullscreenControl: boolean,
@@ -296,6 +333,7 @@ const PersonalAirportSection = (): ReactElement => {
             ) : visualizationMode === "earth" ? (
                 <EarthMap
                     ariaLabel="机场打卡三维地球"
+                    autoRotate={isEarthAutoRotate}
                     markers={airportMapMarkers}
                     onRendererReady={handleEarthRendererReady}
                     renderEngine={earthRenderEngine}
@@ -321,6 +359,7 @@ const PersonalAirportSection = (): ReactElement => {
                   >
                       {renderEarthRendererSwitcher()}
                       <div className="personal-section__actions">
+                          {renderEarthAutoRotateToggle()}
                           {renderVisualizationModeSwitcher()}
                           {renderFullscreenToggle(true)}
                       </div>
@@ -344,6 +383,7 @@ const PersonalAirportSection = (): ReactElement => {
                             <h2 id="airport-map-title">打卡过的机场</h2>
                         </div>
                         <div className="personal-section__actions">
+                            {renderEarthAutoRotateToggle()}
                             {renderVisualizationModeSwitcher()}
                             {renderFullscreenToggle(false)}
                         </div>

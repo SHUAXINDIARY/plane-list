@@ -667,6 +667,14 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
         departureDate: "2023-4-1",
     },
     {
+        airline: "中国国际航空",
+        aircraft: "777-300ER",
+        origin: "中国-北京大兴",
+        destination: "中国-上海虹桥",
+        routeKind: "one-way",
+        departureDate: "2021-5-10",
+    },
+    {
         airline: "中国南方航空",
         aircraft: "737-800",
         origin: "中国-武汉",
