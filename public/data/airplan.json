@@ -2516,6 +2516,7 @@
         "passengerAircraftCount": 97,
         "models": {
             "Airbus": {
+                "A320neo": "https://www.planespotters.net/photos/fleet/Vietnam-Airlines/airbus-a320neo",
                 "A321-200": "https://www.planespotters.net/photos/fleet/Vietnam-Airlines/Airbus/A321-200",
                 "A321neo": "https://www.planespotters.net/photos/fleet/Vietnam-Airlines/airbus-a321neo",
                 "A350-900": "https://www.planespotters.net/photos/fleet/Vietnam-Airlines/Airbus/A350-900"
@@ -2671,6 +2672,7 @@
                 "A321XLR": "https://www.planespotters.net/photos/fleet/Qantas/Airbus/A321XLR",
                 "A330-200": "https://www.planespotters.net/photos/fleet/Qantas/Airbus/A330-200",
                 "A330-300": "https://www.planespotters.net/photos/fleet/Qantas/Airbus/A330-300",
+                "A350-1000ULR": "https://www.planespotters.net/photos/fleet/Qantas/Airbus/A350-1000",
                 "A380-800": "https://www.planespotters.net/photos/fleet/Qantas/Airbus/A380-800"
             },
             "Boeing": {

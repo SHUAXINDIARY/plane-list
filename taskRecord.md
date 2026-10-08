@@ -9199,3 +9199,52 @@
 - `src/pages/planeRender/viewport/types.ts`：多模型 props、加载进度和尺寸类型。
 - `src/pages/planeRender/viewport/aircraft/model.ts`：支持按共同参考尺寸归一化模型。
 - `src/pages/planeRender/viewport/components/ViewportOverlays.tsx`：全屏目录传递多选状态。
+
+---
+
+## 日期
+
+2026-10-08
+
+## 任务目的
+
+更新澳洲航空（Qantas）的机型数据，使其条目结构与英国航空保持一致。
+
+## 完成过程
+
+1. 阅读项目规则并确认航司机型条目位于 `public/data/airplan.json`。
+2. 对照英国航空条目的 `models` 结构检查澳洲航空现有 Airbus 与 Boeing 机型。
+3. 补充澳洲航空已公布的 Airbus A350-1000ULR 机型及对应图片页面链接。
+4. 校验 JSON 文件格式。
+
+## 修改具体文件
+
+- `public/data/airplan.json`
+  - 在澳洲航空 Airbus 机型列表中新增 `A350-1000ULR`。
+
+- `taskRecord.md`
+  - 追加本次澳洲航空机型数据更新记录。
+
+---
+
+## 日期
+
+2026-10-08
+
+## 任务目的
+
+更新越南航空（Vietnam Airlines）的机型数据，使其条目结构与英国航空保持一致。
+
+## 完成过程
+
+1. 定位越南航空条目并对照英国航空的 `models` 结构检查现有机型。
+2. 根据越南航空公开机队信息，在 Airbus 列表中补充 A320neo 及对应图片页面链接。
+3. 校验 JSON 文件格式。
+
+## 修改具体文件
+
+- `public/data/airplan.json`
+  - 在越南航空 Airbus 机型列表中新增 `A320neo`。
+
+- `taskRecord.md`
+  - 追加本次越南航空机型数据更新记录。
