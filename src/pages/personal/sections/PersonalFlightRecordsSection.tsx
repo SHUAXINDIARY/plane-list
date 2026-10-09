@@ -343,18 +343,51 @@ const FlightRecordsAircraftChart = (): ReactElement => {
  * 个人档案乘机台账：按年份分组展示航司、机型、航线与日期。
  */
 const PersonalFlightRecordsSection = (): ReactElement => {
-    /** 当前展开的年份；`undefined` 表示全部折叠。 */
-    const [expandedFlightYear, setExpandedFlightYear] = useState<
-        number | undefined
-    >(undefined);
+    /** 当前展开的年份集合；空集合表示全部折叠。 */
+    const [expandedFlightYears, setExpandedFlightYears] = useState<
+        ReadonlySet<number>
+    >(new Set<number>());
 
-    // 手风琴切换：同一时刻仅保留一个展开年份，再次点击已展开项则折叠。
+    /** 独立切换单个年份，不影响其他年份面板的展开状态。 */
     const toggleFlightYear = (flightYear: number): void => {
-        setExpandedFlightYear(
-            (currentExpandedFlightYear: number | undefined): number | undefined =>
-                currentExpandedFlightYear === flightYear ? undefined : flightYear,
+        setExpandedFlightYears(
+            (currentExpandedFlightYears: ReadonlySet<number>): Set<number> => {
+                const nextExpandedFlightYears = new Set(
+                    currentExpandedFlightYears,
+                );
+
+                if (nextExpandedFlightYears.has(flightYear)) {
+                    nextExpandedFlightYears.delete(flightYear);
+                } else {
+                    nextExpandedFlightYears.add(flightYear);
+                }
+
+                return nextExpandedFlightYears;
+            },
         );
     };
+
+    /** 一次展开所有可见年份，使用新的 Set 保持状态不可变。 */
+    const expandAllFlightYears = (): void => {
+        setExpandedFlightYears(
+            new Set<number>(
+                flightRecordsByYear.map(
+                    (flightYearGroup: FlightYearGroup): number =>
+                        flightYearGroup.year,
+                ),
+            ),
+        );
+    };
+
+    /** 一次折叠所有年份，回到紧凑的账本摘要状态。 */
+    const collapseAllFlightYears = (): void => {
+        setExpandedFlightYears(new Set<number>());
+    };
+
+    const areAllFlightYearsExpanded =
+        flightRecordsByYear.length > 0 &&
+        expandedFlightYears.size === flightRecordsByYear.length;
+    const areAllFlightYearsCollapsed = expandedFlightYears.size === 0;
 
     return (
         <section
@@ -382,6 +415,36 @@ const PersonalFlightRecordsSection = (): ReactElement => {
                             种机型
                         </span>
                     </div>
+                    <div
+                        className="flight-ledger__bulk-actions"
+                        role="group"
+                        aria-label="年份面板快捷操作"
+                    >
+                        <button
+                            className="flight-ledger__bulk-action"
+                            type="button"
+                            onClick={expandAllFlightYears}
+                            disabled={areAllFlightYearsExpanded}
+                        >
+                            <span
+                                className="flight-ledger__bulk-action-icon flight-ledger__bulk-action-icon--expand"
+                                aria-hidden="true"
+                            />
+                            展开全部
+                        </button>
+                        <button
+                            className="flight-ledger__bulk-action"
+                            type="button"
+                            onClick={collapseAllFlightYears}
+                            disabled={areAllFlightYearsCollapsed}
+                        >
+                            <span
+                                className="flight-ledger__bulk-action-icon flight-ledger__bulk-action-icon--collapse"
+                                aria-hidden="true"
+                            />
+                            折叠全部
+                        </button>
+                    </div>
                 </div>
 
                 <FlightRecordsYearChart />
@@ -390,8 +453,9 @@ const PersonalFlightRecordsSection = (): ReactElement => {
                 <div className="flight-ledger__body">
                     {flightRecordsByYear.map(
                         (flightYearGroup: FlightYearGroup): ReactElement => {
-                            const isFlightYearExpanded =
-                                expandedFlightYear === flightYearGroup.year;
+                            const isFlightYearExpanded = expandedFlightYears.has(
+                                flightYearGroup.year,
+                            );
                             const flightYearPanelId = `flight-year-panel-${flightYearGroup.year}`;
 
                             return (

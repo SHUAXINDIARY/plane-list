@@ -1589,6 +1589,11 @@
 }
 
 .flight-ledger__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  flex-wrap: wrap;
   padding: 1rem 1rem 0.85rem;
   border-bottom: 1px solid var(--pl-border-divider);
 }
@@ -1617,6 +1622,74 @@
   color: var(--pl-accent);
   font-family: var(--pl-font-display);
   font-size: 0.95rem;
+}
+
+.flight-ledger__bulk-actions {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 0.15rem;
+  padding: 0.16rem;
+  background-color: var(--pl-surface-personal-pill);
+  border: 1px solid var(--pl-border-muted);
+  border-radius: 0.62rem;
+}
+
+.flight-ledger__bulk-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.38rem;
+  min-height: 2.12rem;
+  padding: 0 0.62rem;
+  color: var(--pl-text-data);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 750;
+  white-space: nowrap;
+  cursor: pointer;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.42rem;
+  transition:
+    color var(--motion-duration-fast) var(--motion-ease-out-quart),
+    background-color var(--motion-duration-fast) var(--motion-ease-out-quart),
+    border-color var(--motion-duration-fast) var(--motion-ease-out-quart),
+    transform var(--personal-motion-feedback) var(--motion-ease-out-quart);
+}
+
+.flight-ledger__bulk-action-icon {
+  width: 0.56rem;
+  height: 0.56rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg) translateY(-0.12rem);
+}
+
+.flight-ledger__bulk-action-icon--collapse {
+  transform: rotate(225deg) translateY(-0.12rem);
+}
+
+.flight-ledger__bulk-action:focus-visible {
+  outline: 2px solid oklch(0.78 0.105 222);
+  outline-offset: 2px;
+}
+
+.flight-ledger__bulk-action:active {
+  transform: scale3d(0.97, 0.97, 1);
+}
+
+.flight-ledger__bulk-action:disabled {
+  color: var(--pl-text-meta);
+  cursor: default;
+  opacity: 0.56;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .flight-ledger__bulk-action:not(:disabled):hover {
+    color: var(--pl-text-heading);
+    background-color: var(--pl-surface-entry);
+    border-color: var(--pl-border-entry-hover);
+  }
 }
 
 .flight-records-chart {
@@ -2195,6 +2268,18 @@
 }
 
 @media (max-width: 640px) {
+  .flight-ledger__toolbar {
+    align-items: stretch;
+  }
+
+  .flight-ledger__bulk-actions {
+    width: 100%;
+  }
+
+  .flight-ledger__bulk-action {
+    flex: 1 1 0;
+  }
+
   .personal-summary {
     align-items: stretch;
     flex-direction: column;
