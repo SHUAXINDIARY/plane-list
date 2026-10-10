@@ -21,6 +21,11 @@ export const CATE_MAP = {
 // 部分航司数据的补充参考来源，用于在页面底部集中展示外部出处。
 export const AIRLINE_REFERENCE_SOURCES: AirlineReferenceSource[] = [
     {
+        airlineName: "飞行雷达24",
+        category: cate_enum.community,
+        urls: ["https://yesterdaysairlines.com/"],
+    },
+    {
         airlineName: "flightradar24",
         category: cate_enum.community,
         urls: ["https://www.flightradar24.com/"],
