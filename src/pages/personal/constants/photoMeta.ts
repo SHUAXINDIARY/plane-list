@@ -1,5 +1,8 @@
 // 飞机模型目录图片URL列表
 const MODEL_PHOTO_URLS = [
+    "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=plane-model%2F1791591102478_PANA4711.jpg",
+    "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=plane-model%2F1791591102877_PANA4747.JPG%EF%BC%88%E5%90%88%E5%B9%B6%EF%BC%89.jpg",
+    "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=plane-model%2F1791591103159_PANA4777.JPG%EF%BC%88%E5%90%88%E5%B9%B6%EF%BC%89.jpg",
     "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=plane-model%2F1788308166786_PANA2785.jpg",
     "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=plane-model%2F1788308168472_PANA2804.jpg",
     "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=plane-model%2F1788308170132_PANA2799.jpg",
@@ -56,6 +59,15 @@ const MODEL_PHOTO_URLS = [
 ];
 /** 飞机照片原图 URL 列表，不含构建期预览数据，供统计与异步相册模块复用。 */
 export const AIRCRAFT_PHOTO_ORIGINAL_URLS: readonly string[] = [
+    "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=1791591302594_PANA4692.jpg",
+    "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=1791591303011_PANA4686.jpg",
+    "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=1791591303704_PANA4688.jpg",
+    "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=1791591229837_PANA4615.jpg",
+    "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=1791591230249_PANA4621.jpg",
+    "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=1791591230606_PANA4624.jpg",
+    "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=1791591231060_PANA4670.jpg",
+    "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=1791591233835_PANA4701.jpg",
+    "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=1791591234635_PANA4702.jpg",
     "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=1788914974320_PANA2898.jpg",
     "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=1788914976225_PANA2933.jpg",
     "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=1788914978214_PANA2970.jpg",
