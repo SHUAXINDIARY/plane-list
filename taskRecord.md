@@ -9270,3 +9270,26 @@
 - `src/pages/personal/sections/PersonalFlightRecordsSection.tsx`：多年份展开状态、批量展开/折叠操作和快捷按钮。
 - `src/pages/personal/index.css`：快捷操作控件、图标、响应式布局和交互状态样式。
 - `taskRecord.md`：追加本次年份面板交互更新记录。
+
+---
+
+## 日期
+
+2026-10-13
+
+## 任务目的
+
+根据澳洲航空机队官网更新 Qantas 机型数据，补齐官网列出的 QantasLink 国内及区域机队。
+
+## 完成过程
+
+1. 阅读项目规则并确认工作区无已有改动，核对 `https://www.qantas.com/zh-cn/onboard/fleet` 及相关机型详情页。
+2. 根据官网明确的型号补充 Airbus A220-300、A319-100、A320-200，以及 De Havilland Canada DHC-8-400（Dash 8-Q400）、Embraer E190、Fokker F100；新增链接指向包含飞机图片和座位图的对应官方机型页。
+3. 保留已有主线机型及链接；A350-1000ULR 在官网标注为“即将亮相”，属于已公布的未来机型，沿用现有收录方式，不计为已服役机型。官网机队页未提供飞机总数，保留原有 `passengerAircraftCount: 138`，此次未重新核实该数量。
+4. 使用 Python 校验 JSON 格式、制造商与机型集合、HTTPS 链接格式，以及与 Git HEAD 的结构差异：仅 Qantas 记录变化，共 13 种机型、5 个制造商，其他航司及原有字段完整保留。使用 `git diff --check` 检查空白错误。
+5. 当前工具未提供 `ReadLints`，以 JSON 结构校验和差异检查完成本次数据及任务记录验证；未运行完整构建。
+
+## 修改具体文件
+
+- `public/data/airplan.json`：澳洲航空新增六种机型，补充 De Havilland Canada、Embraer、Fokker 制造商分组及官方机型页链接。
+- `taskRecord.md`：追加本次官网机队数据核对、更新范围及验证限制记录。

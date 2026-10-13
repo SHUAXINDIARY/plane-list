@@ -2669,6 +2669,9 @@
         "passengerAircraftCount": 138,
         "models": {
             "Airbus": {
+                "A220-300": "https://www.qantas.com/zh-cn/onboard/fleet/a220",
+                "A319-100": "https://www.qantas.com/zh-cn/onboard/fleet/a319",
+                "A320-200": "https://www.qantas.com/zh-cn/onboard/fleet/a320",
                 "A321XLR": "https://www.planespotters.net/photos/fleet/Qantas/Airbus/A321XLR",
                 "A330-200": "https://www.planespotters.net/photos/fleet/Qantas/Airbus/A330-200",
                 "A330-300": "https://www.planespotters.net/photos/fleet/Qantas/Airbus/A330-300",
@@ -2678,6 +2681,15 @@
             "Boeing": {
                 "B737-800": "https://www.planespotters.net/photos/fleet/Qantas/Boeing/737-800",
                 "B787-9": "https://www.planespotters.net/photos/fleet/Qantas/Boeing/787-9"
+            },
+            "De Havilland Canada": {
+                "DHC-8-400": "https://www.qantas.com/zh-cn/onboard/fleet/dash-8"
+            },
+            "Embraer": {
+                "E190": "https://www.qantas.com/zh-cn/onboard/fleet/e190"
+            },
+            "Fokker": {
+                "F100": "https://www.qantas.com/zh-cn/onboard/fleet/f100"
             }
         }
     },
