@@ -9293,3 +9293,82 @@
 
 - `public/data/airplan.json`：澳洲航空新增六种机型，补充 De Havilland Canada、Embraer、Fokker 制造商分组及官方机型页链接。
 - `taskRecord.md`：追加本次官网机队数据核对、更新范围及验证限制记录。
+
+---
+
+## 日期
+
+2026-10-14
+
+## 任务目的
+
+补充 Boeing 737-800WL，并检查机型目录中类似翼尖小翼配置和其他细分型号的遗漏。
+
+## 完成过程
+
+1. 阅读项目规则、机型 WIKI 解析逻辑和已有 SL 记录，确认 `aircraft.json` 按制造商、系列、代际组织，机型详情统一包含 12 个字段；检查开始时工作区无已有改动。
+2. 查阅 Boeing 翼展对照表与 Aviation Partners Boeing（APB）产品、认证历史资料。WL 在本次目录中表示 Blended Winglet 配置，SSW 表示 Split Scimitar Winglet 配置；它们保留母型 ICAO 类型码，不作为新的认证机型代码。
+   - Boeing 翼展对照表：`https://www.boeing.com/content/dam/boeing/v2/airports/faq/wingletspans.pdf`（文件内日期 2014-05-02，作为尺寸依据）。
+   - APB 产品目录：`https://www.aviationpartnersboeing.com/products.php`。
+   - APB 认证历史：`https://www.aviationpartnersboeing.com/about_history.php`。
+   - Aviation Partners 已认证配置说明：`https://www.aviationpartners.com/6-billion-gallons-jet-fuel-saved/`。
+3. 在母型旁新增 14 条配置记录：
+   - 737 Classic：737-300WL、737-500WL。
+   - 737 NG：737-700WL、737-800WL、737-900WL、737-900ERWL；737-700SSW、737-800SSW、737-900SSW、737-900ERSSW。
+   - 757：757-200WL、757-300WL。
+   - 767：767-300ERWL、767-300FWL。
+4. 已核实翼展使用官方公布的米制精度：737 Classic WL 为 31.1 米，737 NG WL 为 35.8 米，737-800/900/900ER SSW 为 35.9 米，757 WL 为 41.1 米，767-300ERWL 为 50.9 米。737-700SSW、767-300FWL 的配置翼展本次未取得明确的独立数值，保持 `null`；不把其他配置的尺寸直接当作其尺寸。
+5. 发动机、座位、机身尺寸、最大起飞重量与生产状态沿用母型基准，状态仍表示母型生产生命周期，不表示改装套件是否在售。新增配置的独立航程均保持 `null`，不按节油百分比推算；仅 767-300ERWL 的配置首飞核实为 2008-07-20，其余新增配置首飞保持 `null`，不套用母型首飞或认证日期。首飞依据：`https://aviationpartnersboeing.com/pdf/pr/2008/08.07.28_AAJuly.pdf`。
+6. 检查其他细分遗漏，结果如下（本次未扩大到以下型号的数据回填）：
+   - Boeing 对照表还列出第三方改装的 727-200 Winglet 配置；APB 历史列出 757-200 Scimitar Blended Winglet（SBW）配置，两者目前均未单列，需另行核对配置参数。
+   - `airplan.json` 已出现、但机型目录尚无独立条目的名称包括 A350-1000ULR、747-400ERF、A321-200/P2F、A330-300P2F；A321-100 也未单列。未直接复制其他型号参数生成记录。
+   - 737-8200 对应已有 737-8-200；777-F 对应已有 777F；A321neoLR 对应已有 A321LR。A319-100、A320-200、A321-200 对应目录已有 A319、A320、A321 的命名，不能仅凭字符串差异判定缺失。
+   - A321-251NX、A321-271NX、A330-302、A350-941 是航司表采用的更细型号标识，目前由相应系列基础条目覆盖，未扩展成全部发动机或认证子型号目录。
+   - 已有 A319SL、A320SL、A321SL，以及 A321LR、A321XLR、A350-900ULR 等条目；本次没有足够的已认证配置证据支持生成 737-400WL、737-600WL 或额外 MAX-WL 条目。
+   - 检查个人乘机记录中的型号名称，没有额外 WL/SSW 配置名称需要同步；个人记录与航司机队表未修改。
+7. 使用 Python 检查 JSON 合法性、重复键、全部记录字段集合、状态枚举、日期、数值、Wikipedia 链接及母型 ICAO 一致性；103 条记录通过校验，其中原有 89 条逐条保持不变，仅新增 14 条。使用 `git diff --check` 检查空白错误。
+8. 当前环境未提供 `ReadLints`；以 JSON/schema 与差异检查完成本次纯数据验证，未运行完整构建或浏览器检查。
+
+## 修改具体文件
+
+- `public/data/aircraft.json`：新增 14 条 Boeing WL/SSW 配置，保留既有目录结构及所有原始记录。
+- `taskRecord.md`：追加本次型号补充、来源、参数口径、其他遗漏与验证结果。
+
+---
+
+## 日期
+
+2026-10-14
+
+## 任务目的
+
+按用户要求补齐上一轮检查提到、尚未单列的机型与具体配置。
+
+## 完成过程
+
+1. 复核项目规则与上一轮检查结果，保留工作区中已补充的 14 条 WL/SSW 记录及任务记录；在临时目录保存本轮修改前的数据快照以校验既有工作未被覆盖。
+2. 新增 11 条记录：727-200WL、757-200SBW、747-400ERF、A321-100、A321-200P2F、A330-300P2F、A350-1000ULR、A321-251NX、A321-271NX、A330-302、A350-941。保持制造商/系列/代际层级及原有 12 字段 schema。
+3. 核实小翼改装与增程货机：727-200WL 按 Boeing 对照表填写 33.3 米翼展；757-200SBW 按 APB 公告确认为 Scimitar Blended Winglet 配置，未取得独立翼展和首飞日期，保持空值；747-400ERF 填写 Boeing 公布的 412,770 千克最大起飞重量及零客运座位，发动机使用 GE CF6-80C2、PW4000 家族级名称，未取得明确独立航程与首飞日期，保持空值。
+   - `https://www.boeing.com/content/dam/boeing/v2/airports/faq/wingletspans.pdf`
+   - `https://www.aviationpartnersboeing.com/pdf/pr/2017/APB_ICE_757SBW%20PR_Final%202-15-17.pdf`
+   - `https://boeing.mediaroom.com/2003-03-31-Boeing-Delivers-KLMs-First-747-400-Extended-Range-Freighter`
+4. 核实客改货型号：A321-200P2F 对应 EFW/Airbus 的 A321P2F 与航司表中的 A321-200/P2F；按 Airbus 公布的公里值填写 3,800 公里航程、93,500 千克最大起飞重量，并按 ST Engineering 公告填写 2020-01-22 改装原型首飞。Airbus 页面不同位置的海里值存在不一致，本次采用其明确公布的公里字段，不从该海里字段换算。A330-300P2F 按 Airbus 规格填写 6,850 公里航程、233,000 千克最大起飞重量；两者客运座位均为零，生产状态表示客改货项目仍在进行，未核实的 A330-300P2F 独立首飞日期保持空值。
+   - `https://www.aircraft.airbus.com/en/aircraft/freighters/a321p2f`
+   - `https://www.stengg.com/en/newsroom/news-releases/st-engineering-airbus-and-efws-a321p2f-solution-marks-new-milestones/`
+   - `https://www.aircraft.airbus.com/en/aircraft/freighters/a330-300p2f`
+   - `https://www.elbeflugzeugwerke.com/en/solutions/freighter-conversion/a330p2f/`
+5. 下载并提取 EASA 型号合格证数据表，在临时目录核对具体型号参数（A320 家族 Issue 62，2026-06-26；A330 Issue 69，2025-12-19；A350 Issue 32，2026-07-01）：A321-100 使用 34.1 米翼展与 89,000 千克认证最大起飞重量，沿用其基础 A321 首飞日期；该重量为已批准改型上限，不代表每架早期 A321-100 的重量配置。A321-251NX 限定为 LEAP-1A32，A321-271NX 限定为 PW1133G-JM/PW1133GA-JM，两者最大起飞重量为 97,000 千克。A330-302 限定为 CF6-80E1A2/A4/A4/B，认证最大起飞重量 242,000 千克、高度 16.83 米。A350-941 单列其正式型号代码与 XWB-84/XWB-75/XWB-84EP 发动机，机型基本尺寸及代表性座位/航程沿用 A350-900；283,000 千克为 XWB-84/-84EP 配置的最大认证重量，XWB-75 配置限值为 255,000 千克。各具体飞机仍以其 AFM、重量改型与客舱布局为准。
+   - `https://www.easa.europa.eu/en/downloads/16507/en`
+   - `https://www.easa.europa.eu/en/downloads/7518/en`
+   - `https://www.easa.europa.eu/en/downloads/17736/en`
+6. 按 Airbus 官方首飞公告与工程说明补充 A350-1000ULR：首飞日期 2026-06-02、Trent XWB-97 发动机、Qantas 代表性客舱 238 座；最大认证座位、独立标称航程与最大起飞重量未取得明确数值，保持空值。状态依所查 Airbus 开发/认证资料标为 `in_development`，不将首飞等同于交付或投入运营，亦不把普通 A350-1000 的重量/航程直接套用于 ULR。
+   - `https://www.airbus.com/en/newsroom/press-releases/2026-06-worlds-longest-range-aircraft-the-airbus-a350-1000ulr-takes-to-the-skies`
+   - `https://www.airbus.com/en/newsroom/stories/2026-06-countdown-to-the-worlds-longest-commercial-flights-the-airbus-a350-1000ulr`
+7. 737-8200、777-F、A321neoLR 等此前已确认对应现有条目的不同名称不重复创建；保留航司表和个人记录不变。对未取得独立首飞日期与航程的配置继续使用 `null`，不把认证日期当作首飞日期。
+8. 使用 Python 校验全部 114 条记录的 JSON、重复键、字段集合、状态枚举、日期、数值、座位数与链接格式，并核对新增货机零座位、NX 发动机、认证重量与首飞日期等关键数据；与本轮开始时快照比较，原有 103 条记录逐条保持不变，仅新增上述 11 条。`git diff --check` 通过。
+9. 当前环境未提供 `ReadLints`；本轮采用数据/schema 与差异检查完成验证，未运行完整构建或浏览器检查。
+
+## 修改具体文件
+
+- `public/data/aircraft.json`：新增 11 条此前未单列的型号与配置。
+- `taskRecord.md`：追加本轮补充范围、官方来源、参数口径和验证结果。

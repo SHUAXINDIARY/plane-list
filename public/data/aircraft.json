@@ -254,6 +254,27 @@
             "heightM": 10.64,
             "mtowKg": 78000,
             "wikipedia": "https://en.wikipedia.org/wiki/Boeing_727"
+          },
+          "727-200WL": {
+            "model": "727-200WL",
+            "icaoType": "B722",
+            "status": "discontinued",
+            "firstFlight": null,
+            "engines": [
+              "Pratt & Whitney JT8D-9",
+              "Pratt & Whitney JT8D-11",
+              "Pratt & Whitney JT8D-15"
+            ],
+            "seats": {
+              "typical": 134,
+              "max": 155
+            },
+            "rangeKm": null,
+            "lengthM": 46.69,
+            "wingspanM": 33.3,
+            "heightM": 10.64,
+            "mtowKg": 78000,
+            "wikipedia": "https://en.wikipedia.org/wiki/Boeing_727"
           }
         }
       }
@@ -326,6 +347,27 @@
             "mtowKg": 62820,
             "wikipedia": "https://en.wikipedia.org/wiki/Boeing_737"
           },
+          "737-300WL": {
+            "model": "737-300WL",
+            "icaoType": "B733",
+            "status": "discontinued",
+            "firstFlight": null,
+            "engines": [
+              "CFM International CFM56-3B1",
+              "CFM International CFM56-3B2",
+              "CFM International CFM56-3C1"
+            ],
+            "seats": {
+              "typical": 128,
+              "max": 149
+            },
+            "rangeKm": null,
+            "lengthM": 33.4,
+            "wingspanM": 31.1,
+            "heightM": 11.13,
+            "mtowKg": 62820,
+            "wikipedia": "https://en.wikipedia.org/wiki/Boeing_737"
+          },
           "737-400": {
             "model": "737-400",
             "icaoType": "B734",
@@ -362,6 +404,26 @@
             "rangeKm": 4440,
             "lengthM": 31.01,
             "wingspanM": 28.88,
+            "heightM": 11.13,
+            "mtowKg": 60550,
+            "wikipedia": "https://en.wikipedia.org/wiki/Boeing_737"
+          },
+          "737-500WL": {
+            "model": "737-500WL",
+            "icaoType": "B735",
+            "status": "discontinued",
+            "firstFlight": null,
+            "engines": [
+              "CFM International CFM56-3B1",
+              "CFM International CFM56-3B2"
+            ],
+            "seats": {
+              "typical": 108,
+              "max": 140
+            },
+            "rangeKm": null,
+            "lengthM": 31.01,
+            "wingspanM": 31.1,
             "heightM": 11.13,
             "mtowKg": 60550,
             "wikipedia": "https://en.wikipedia.org/wiki/Boeing_737"
@@ -409,6 +471,48 @@
             "mtowKg": 70080,
             "wikipedia": "https://en.wikipedia.org/wiki/Boeing_737"
           },
+          "737-700WL": {
+            "model": "737-700WL",
+            "icaoType": "B737",
+            "status": "discontinued",
+            "firstFlight": null,
+            "engines": [
+              "CFM International CFM56-7B20",
+              "CFM International CFM56-7B22",
+              "CFM International CFM56-7B24"
+            ],
+            "seats": {
+              "typical": 126,
+              "max": 149
+            },
+            "rangeKm": null,
+            "lengthM": 33.63,
+            "wingspanM": 35.8,
+            "heightM": 12.5,
+            "mtowKg": 70080,
+            "wikipedia": "https://en.wikipedia.org/wiki/Boeing_737"
+          },
+          "737-700SSW": {
+            "model": "737-700SSW",
+            "icaoType": "B737",
+            "status": "discontinued",
+            "firstFlight": null,
+            "engines": [
+              "CFM International CFM56-7B20",
+              "CFM International CFM56-7B22",
+              "CFM International CFM56-7B24"
+            ],
+            "seats": {
+              "typical": 126,
+              "max": 149
+            },
+            "rangeKm": null,
+            "lengthM": 33.63,
+            "wingspanM": null,
+            "heightM": 12.5,
+            "mtowKg": 70080,
+            "wikipedia": "https://en.wikipedia.org/wiki/Boeing_737"
+          },
           "737-800": {
             "model": "737-800",
             "icaoType": "B738",
@@ -426,6 +530,48 @@
             "rangeKm": 5765,
             "lengthM": 39.47,
             "wingspanM": 35.79,
+            "heightM": 12.5,
+            "mtowKg": 79010,
+            "wikipedia": "https://en.wikipedia.org/wiki/Boeing_737"
+          },
+          "737-800WL": {
+            "model": "737-800WL",
+            "icaoType": "B738",
+            "status": "discontinued",
+            "firstFlight": null,
+            "engines": [
+              "CFM International CFM56-7B24",
+              "CFM International CFM56-7B26",
+              "CFM International CFM56-7B27"
+            ],
+            "seats": {
+              "typical": 162,
+              "max": 189
+            },
+            "rangeKm": null,
+            "lengthM": 39.47,
+            "wingspanM": 35.8,
+            "heightM": 12.5,
+            "mtowKg": 79010,
+            "wikipedia": "https://en.wikipedia.org/wiki/Boeing_737"
+          },
+          "737-800SSW": {
+            "model": "737-800SSW",
+            "icaoType": "B738",
+            "status": "discontinued",
+            "firstFlight": null,
+            "engines": [
+              "CFM International CFM56-7B24",
+              "CFM International CFM56-7B26",
+              "CFM International CFM56-7B27"
+            ],
+            "seats": {
+              "typical": 162,
+              "max": 189
+            },
+            "rangeKm": null,
+            "lengthM": 39.47,
+            "wingspanM": 35.9,
             "heightM": 12.5,
             "mtowKg": 79010,
             "wikipedia": "https://en.wikipedia.org/wiki/Boeing_737"
@@ -450,6 +596,46 @@
             "mtowKg": 79010,
             "wikipedia": "https://en.wikipedia.org/wiki/Boeing_737"
           },
+          "737-900WL": {
+            "model": "737-900WL",
+            "icaoType": "B739",
+            "status": "discontinued",
+            "firstFlight": null,
+            "engines": [
+              "CFM International CFM56-7B26",
+              "CFM International CFM56-7B27"
+            ],
+            "seats": {
+              "typical": 177,
+              "max": 189
+            },
+            "rangeKm": null,
+            "lengthM": 42.11,
+            "wingspanM": 35.8,
+            "heightM": 12.5,
+            "mtowKg": 79010,
+            "wikipedia": "https://en.wikipedia.org/wiki/Boeing_737"
+          },
+          "737-900SSW": {
+            "model": "737-900SSW",
+            "icaoType": "B739",
+            "status": "discontinued",
+            "firstFlight": null,
+            "engines": [
+              "CFM International CFM56-7B26",
+              "CFM International CFM56-7B27"
+            ],
+            "seats": {
+              "typical": 177,
+              "max": 189
+            },
+            "rangeKm": null,
+            "lengthM": 42.11,
+            "wingspanM": 35.9,
+            "heightM": 12.5,
+            "mtowKg": 79010,
+            "wikipedia": "https://en.wikipedia.org/wiki/Boeing_737"
+          },
           "737-900ER": {
             "model": "737-900ER",
             "icaoType": "B739",
@@ -466,6 +652,46 @@
             "rangeKm": 5925,
             "lengthM": 42.11,
             "wingspanM": 35.79,
+            "heightM": 12.5,
+            "mtowKg": 85000,
+            "wikipedia": "https://en.wikipedia.org/wiki/Boeing_737"
+          },
+          "737-900ERWL": {
+            "model": "737-900ERWL",
+            "icaoType": "B739",
+            "status": "discontinued",
+            "firstFlight": null,
+            "engines": [
+              "CFM International CFM56-7B26",
+              "CFM International CFM56-7B27"
+            ],
+            "seats": {
+              "typical": 178,
+              "max": 220
+            },
+            "rangeKm": null,
+            "lengthM": 42.11,
+            "wingspanM": 35.8,
+            "heightM": 12.5,
+            "mtowKg": 85000,
+            "wikipedia": "https://en.wikipedia.org/wiki/Boeing_737"
+          },
+          "737-900ERSSW": {
+            "model": "737-900ERSSW",
+            "icaoType": "B739",
+            "status": "discontinued",
+            "firstFlight": null,
+            "engines": [
+              "CFM International CFM56-7B26",
+              "CFM International CFM56-7B27"
+            ],
+            "seats": {
+              "typical": 178,
+              "max": 220
+            },
+            "rangeKm": null,
+            "lengthM": 42.11,
+            "wingspanM": 35.9,
             "heightM": 12.5,
             "mtowKg": 85000,
             "wikipedia": "https://en.wikipedia.org/wiki/Boeing_737"
@@ -721,6 +947,26 @@
             "mtowKg": 396900,
             "wikipedia": "https://en.wikipedia.org/wiki/Boeing_747-400"
           },
+          "747-400ERF": {
+            "model": "747-400ERF",
+            "icaoType": "B744",
+            "status": "discontinued",
+            "firstFlight": null,
+            "engines": [
+              "General Electric CF6-80C2",
+              "Pratt & Whitney PW4000"
+            ],
+            "seats": {
+              "typical": 0,
+              "max": 0
+            },
+            "rangeKm": null,
+            "lengthM": 70.66,
+            "wingspanM": 64.44,
+            "heightM": 19.41,
+            "mtowKg": 412770,
+            "wikipedia": "https://en.wikipedia.org/wiki/Boeing_747-400"
+          },
           "747-8": {
             "model": "747-8",
             "icaoType": "B748",
@@ -787,6 +1033,46 @@
             "mtowKg": 115680,
             "wikipedia": "https://en.wikipedia.org/wiki/Boeing_757"
           },
+          "757-200WL": {
+            "model": "757-200WL",
+            "icaoType": "B752",
+            "status": "discontinued",
+            "firstFlight": null,
+            "engines": [
+              "Rolls-Royce RB211-535",
+              "Pratt & Whitney PW2000"
+            ],
+            "seats": {
+              "typical": 200,
+              "max": 239
+            },
+            "rangeKm": null,
+            "lengthM": 47.32,
+            "wingspanM": 41.1,
+            "heightM": 13.56,
+            "mtowKg": 115680,
+            "wikipedia": "https://en.wikipedia.org/wiki/Boeing_757"
+          },
+          "757-200SBW": {
+            "model": "757-200SBW",
+            "icaoType": "B752",
+            "status": "discontinued",
+            "firstFlight": null,
+            "engines": [
+              "Rolls-Royce RB211-535",
+              "Pratt & Whitney PW2000"
+            ],
+            "seats": {
+              "typical": 200,
+              "max": 239
+            },
+            "rangeKm": null,
+            "lengthM": 47.32,
+            "wingspanM": null,
+            "heightM": 13.56,
+            "mtowKg": 115680,
+            "wikipedia": "https://en.wikipedia.org/wiki/Boeing_757"
+          },
           "757-300": {
             "model": "757-300",
             "icaoType": "B753",
@@ -803,6 +1089,26 @@
             "rangeKm": 6287,
             "lengthM": 54.43,
             "wingspanM": 38.05,
+            "heightM": 13.56,
+            "mtowKg": 123830,
+            "wikipedia": "https://en.wikipedia.org/wiki/Boeing_757"
+          },
+          "757-300WL": {
+            "model": "757-300WL",
+            "icaoType": "B753",
+            "status": "discontinued",
+            "firstFlight": null,
+            "engines": [
+              "Rolls-Royce RB211-535",
+              "Pratt & Whitney PW2000"
+            ],
+            "seats": {
+              "typical": 243,
+              "max": 295
+            },
+            "rangeKm": null,
+            "lengthM": 54.43,
+            "wingspanM": 41.1,
             "heightM": 13.56,
             "mtowKg": 123830,
             "wikipedia": "https://en.wikipedia.org/wiki/Boeing_757"
@@ -897,6 +1203,27 @@
             "mtowKg": 186880,
             "wikipedia": "https://en.wikipedia.org/wiki/Boeing_767"
           },
+          "767-300ERWL": {
+            "model": "767-300ERWL",
+            "icaoType": "B763",
+            "status": "discontinued",
+            "firstFlight": "2008-07-20",
+            "engines": [
+              "General Electric CF6",
+              "Pratt & Whitney PW4000",
+              "Rolls-Royce RB211"
+            ],
+            "seats": {
+              "typical": 218,
+              "max": 351
+            },
+            "rangeKm": null,
+            "lengthM": 54.94,
+            "wingspanM": 50.9,
+            "heightM": 15.85,
+            "mtowKg": 186880,
+            "wikipedia": "https://en.wikipedia.org/wiki/Boeing_767"
+          },
           "767-300F": {
             "model": "767-300F",
             "icaoType": "B763",
@@ -912,6 +1239,25 @@
             "rangeKm": 6025,
             "lengthM": 54.94,
             "wingspanM": 47.57,
+            "heightM": 15.85,
+            "mtowKg": 186880,
+            "wikipedia": "https://en.wikipedia.org/wiki/Boeing_767"
+          },
+          "767-300FWL": {
+            "model": "767-300FWL",
+            "icaoType": "B763",
+            "status": "in_production",
+            "firstFlight": null,
+            "engines": [
+              "General Electric CF6-80C2"
+            ],
+            "seats": {
+              "typical": 0,
+              "max": 0
+            },
+            "rangeKm": null,
+            "lengthM": 54.94,
+            "wingspanM": null,
             "heightM": 15.85,
             "mtowKg": 186880,
             "wikipedia": "https://en.wikipedia.org/wiki/Boeing_767"
@@ -1368,6 +1714,48 @@
             "mtowKg": 93500,
             "wikipedia": "https://en.wikipedia.org/wiki/Airbus_A320_family"
           },
+          "A321-100": {
+            "model": "A321-100",
+            "icaoType": "A321",
+            "status": "discontinued",
+            "firstFlight": "1993-03-11",
+            "engines": [
+              "CFM International CFM56-5B1",
+              "CFM International CFM56-5B1/2",
+              "CFM International CFM56-5B2",
+              "International Aero Engines V2530-A5"
+            ],
+            "seats": {
+              "typical": 185,
+              "max": 220
+            },
+            "rangeKm": null,
+            "lengthM": 44.51,
+            "wingspanM": 34.1,
+            "heightM": 11.76,
+            "mtowKg": 89000,
+            "wikipedia": "https://en.wikipedia.org/wiki/Airbus_A320_family"
+          },
+          "A321-200P2F": {
+            "model": "A321-200P2F",
+            "icaoType": "A321",
+            "status": "in_production",
+            "firstFlight": "2020-01-22",
+            "engines": [
+              "CFM56-5B",
+              "V2500-A5"
+            ],
+            "seats": {
+              "typical": 0,
+              "max": 0
+            },
+            "rangeKm": 3800,
+            "lengthM": 44.51,
+            "wingspanM": 35.8,
+            "heightM": 11.76,
+            "mtowKg": 93500,
+            "wikipedia": "https://en.wikipedia.org/wiki/Airbus_A320_family"
+          },
           "A321SL": {
             "model": "A321SL",
             "icaoType": "A321",
@@ -1444,6 +1832,45 @@
               "max": 244
             },
             "rangeKm": 7400,
+            "lengthM": 44.51,
+            "wingspanM": 35.8,
+            "heightM": 11.76,
+            "mtowKg": 97000,
+            "wikipedia": "https://en.wikipedia.org/wiki/Airbus_A320_family"
+          },
+          "A321-251NX": {
+            "model": "A321-251NX",
+            "icaoType": "A21N",
+            "status": "in_production",
+            "firstFlight": null,
+            "engines": [
+              "CFM LEAP-1A32"
+            ],
+            "seats": {
+              "typical": 190,
+              "max": 244
+            },
+            "rangeKm": null,
+            "lengthM": 44.51,
+            "wingspanM": 35.8,
+            "heightM": 11.76,
+            "mtowKg": 97000,
+            "wikipedia": "https://en.wikipedia.org/wiki/Airbus_A320_family"
+          },
+          "A321-271NX": {
+            "model": "A321-271NX",
+            "icaoType": "A21N",
+            "status": "in_production",
+            "firstFlight": null,
+            "engines": [
+              "Pratt & Whitney PW1133G-JM",
+              "Pratt & Whitney PW1133GA-JM"
+            ],
+            "seats": {
+              "typical": 190,
+              "max": 244
+            },
+            "rangeKm": null,
             "lengthM": 44.51,
             "wingspanM": 35.8,
             "heightM": 11.76,
@@ -1676,6 +2103,48 @@
             "mtowKg": 242000,
             "wikipedia": "https://en.wikipedia.org/wiki/Airbus_A330"
           },
+          "A330-302": {
+            "model": "A330-302",
+            "icaoType": "A333",
+            "status": "discontinued",
+            "firstFlight": null,
+            "engines": [
+              "General Electric CF6-80E1A2",
+              "General Electric CF6-80E1A4",
+              "General Electric CF6-80E1A4/B"
+            ],
+            "seats": {
+              "typical": 277,
+              "max": 440
+            },
+            "rangeKm": null,
+            "lengthM": 63.66,
+            "wingspanM": 60.3,
+            "heightM": 16.83,
+            "mtowKg": 242000,
+            "wikipedia": "https://en.wikipedia.org/wiki/Airbus_A330"
+          },
+          "A330-300P2F": {
+            "model": "A330-300P2F",
+            "icaoType": "A333",
+            "status": "in_production",
+            "firstFlight": null,
+            "engines": [
+              "General Electric CF6",
+              "Pratt & Whitney PW4000",
+              "Rolls-Royce Trent 700"
+            ],
+            "seats": {
+              "typical": 0,
+              "max": 0
+            },
+            "rangeKm": 6850,
+            "lengthM": 63.66,
+            "wingspanM": 60.3,
+            "heightM": 16.79,
+            "mtowKg": 233000,
+            "wikipedia": "https://en.wikipedia.org/wiki/Airbus_A330"
+          },
           "A330-800": {
             "model": "A330-800",
             "icaoType": "A338",
@@ -1825,6 +2294,27 @@
             "mtowKg": 283000,
             "wikipedia": "https://en.wikipedia.org/wiki/Airbus_A350"
           },
+          "A350-941": {
+            "model": "A350-941",
+            "icaoType": "A359",
+            "status": "in_production",
+            "firstFlight": "2013-06-14",
+            "engines": [
+              "Rolls-Royce Trent XWB-84",
+              "Rolls-Royce Trent XWB-75",
+              "Rolls-Royce Trent XWB-84EP"
+            ],
+            "seats": {
+              "typical": 325,
+              "max": 440
+            },
+            "rangeKm": 15000,
+            "lengthM": 66.8,
+            "wingspanM": 64.75,
+            "heightM": 17.05,
+            "mtowKg": 283000,
+            "wikipedia": "https://en.wikipedia.org/wiki/Airbus_A350"
+          },
           "A350-900ULR": {
             "model": "A350-900ULR",
             "icaoType": "A359",
@@ -1861,6 +2351,25 @@
             "wingspanM": 64.75,
             "heightM": 17.08,
             "mtowKg": 322000,
+            "wikipedia": "https://en.wikipedia.org/wiki/Airbus_A350"
+          },
+          "A350-1000ULR": {
+            "model": "A350-1000ULR",
+            "icaoType": "A35K",
+            "status": "in_development",
+            "firstFlight": "2026-06-02",
+            "engines": [
+              "Rolls-Royce Trent XWB-97"
+            ],
+            "seats": {
+              "typical": 238,
+              "max": null
+            },
+            "rangeKm": null,
+            "lengthM": 73.79,
+            "wingspanM": 64.75,
+            "heightM": 17.08,
+            "mtowKg": null,
             "wikipedia": "https://en.wikipedia.org/wiki/Airbus_A350"
           },
           "A350F": {
