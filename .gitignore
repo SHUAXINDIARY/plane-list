@@ -1,4 +1,5 @@
 # Local
+# Ignore macOS Finder metadata in every directory.
 .DS_Store
 *.local
 *.log*
