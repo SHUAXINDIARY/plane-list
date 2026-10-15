@@ -1341,18 +1341,30 @@
         "country": "日本",
         "airlineWebsite": "https://www.jal.co.jp",
         "airlineAlliance": "oneworld",
-        "passengerAircraftCount": 150,
+        "passengerAircraftCount": 234,
         "models": {
             "Airbus": {
+                "A321-200": "https://www.planespotters.net/photos/fleet/Japan-Airlines/Airbus/A321-200",
                 "A350-900": "https://www.planespotters.net/photos/fleet/Japan-Airlines/Airbus/A350-900",
                 "A350-1000": "https://www.planespotters.net/photos/fleet/Japan-Airlines/Airbus/A350-1000"
             },
             "Boeing": {
                 "B737-800": "https://www.planespotters.net/photos/fleet/Japan-Airlines/Boeing/737-800",
-                "B767-300": "https://www.planespotters.net/photos/fleet/Japan-Airlines/Boeing/767-300",
+                "B767-300ER": "https://www.planespotters.net/photos/fleet/Japan-Airlines/Boeing/767-300ER",
                 "B777-300ER": "https://www.planespotters.net/photos/fleet/Japan-Airlines/Boeing/777-300ER",
                 "B787-8": "https://www.planespotters.net/photos/fleet/Japan-Airlines/Boeing/787-8",
                 "B787-9": "https://www.planespotters.net/photos/fleet/Japan-Airlines/Boeing/787-9"
+            },
+            "Embraer": {
+                "E170": "https://www.jetphotos.com/aircraft/Embraer%20ERJ-170-100STD",
+                "E190": "https://www.jetphotos.com/aircraft/Embraer%20ERJ-190-100STD"
+            },
+            "De Havilland Canada": {
+                "DHC-8-400": "https://www.jetphotos.com/aircraft/Bombardier%20Dash%208-Q402"
+            },
+            "ATR": {
+                "ATR42-600": "https://www.jetphotos.com/aircraft/ATR%2042-600",
+                "ATR72-600": "https://www.jetphotos.com/aircraft/ATR%2072-600"
             }
         }
     },
