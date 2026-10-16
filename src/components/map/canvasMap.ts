@@ -24,8 +24,11 @@ export const MIN_MAP_SCALE = 1;
 /** 视口最大缩放倍数，放大后可查看局部密集标记。 */
 export const MAX_MAP_SCALE = 5;
 
-/** 滚轮每次缩放的倍率步进。 */
-export const MAP_ZOOM_STEP = 1.18;
+/** 滚轮每次缩放的倍率步进，保持滚轮缩放更细腻。 */
+export const MAP_ZOOM_STEP = 1.08;
+
+/** 缩放拖拽条每次调整的倍率步进。 */
+export const MAP_ZOOM_SLIDER_STEP = 0.05;
 
 /** 标记点在屏幕（CSS 像素）下的绘制半径，不随画布缩放变化。 */
 export const MARKER_RADIUS = 5.6;
@@ -135,6 +138,32 @@ export const constrainViewportTransform = (
     x: clampNumber(viewportTransform.x, containerWidth * (1 - viewportTransform.scale), 0),
     y: clampNumber(viewportTransform.y, containerHeight * (1 - viewportTransform.scale), 0),
   };
+};
+
+/**
+ * 以指定屏幕坐标为锚点调整缩放，保证用户正在查看的地图区域保持在原位置。
+ */
+export const zoomViewportAtPoint = (
+  viewportTransform: ViewportTransform,
+  nextScale: number,
+  anchorX: number,
+  anchorY: number,
+  containerWidth: number,
+  containerHeight: number,
+): ViewportTransform => {
+  const clampedScale = clampNumber(nextScale, MIN_MAP_SCALE, MAX_MAP_SCALE);
+  const mapPointX = (anchorX - viewportTransform.x) / viewportTransform.scale;
+  const mapPointY = (anchorY - viewportTransform.y) / viewportTransform.scale;
+
+  return constrainViewportTransform(
+    {
+      scale: clampedScale,
+      x: anchorX - mapPointX * clampedScale,
+      y: anchorY - mapPointY * clampedScale,
+    },
+    containerWidth,
+    containerHeight,
+  );
 };
 
 /**

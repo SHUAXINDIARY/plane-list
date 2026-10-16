@@ -7,11 +7,11 @@ import { normalizeThemePreference } from '../../utils/themePreference';
 import type { ThemePreference } from '../../utils/themePreference';
 import {
   MAP_ZOOM_STEP,
+  MAP_ZOOM_SLIDER_STEP,
   MAX_MAP_SCALE,
   MIN_MAP_SCALE,
   blitMapLayerCache,
   buildMapLayerCache,
-  clampNumber,
   constrainViewportTransform,
   getMapCanvasInteractionMetrics,
   getMapCanvasRenderMetrics,
@@ -21,6 +21,7 @@ import {
   paintMapMarkers,
   projectMapCoordinate,
   readMapCanvasPalette,
+  zoomViewportAtPoint,
 } from './canvasMap';
 import type { MapCanvasPalette, MapCanvasRenderMetrics, ViewportTransform } from './canvasMap';
 import type { AnnotatedWorldMapProps, WorldMapMarker } from './type';
@@ -109,6 +110,9 @@ const countMarkersByScope = (
 };
 
 const DEFAULT_MARKER_FLAG = '🌐';
+
+/** 将地图缩放倍数转换为控件中的百分比读数。 */
+const formatMapScale = (scale: number): string => `${Math.round(scale * 100)}%`;
 
 /**
  * 按当前文档主题返回对应配色的世界地图 SVG 资源 URL。
@@ -570,6 +574,32 @@ const AnnotatedWorldMap = ({
     };
   }, [cancelScheduledMapRedraw]);
 
+  /**
+   * 以地图中心为锚点更新缩放，供拖拽条和加减按钮复用。
+   */
+  const updateMapScale = useCallback((nextScale: number): void => {
+    const container = mapContainerRef.current;
+
+    if (container === null) {
+      return;
+    }
+
+    const containerRect = container.getBoundingClientRect();
+    const anchorX = containerRect.width / 2;
+    const anchorY = containerRect.height / 2;
+
+    setViewportTransform((currentViewportTransform: ViewportTransform): ViewportTransform => {
+      return zoomViewportAtPoint(
+        currentViewportTransform,
+        nextScale,
+        anchorX,
+        anchorY,
+        containerRect.width,
+        containerRect.height,
+      );
+    });
+  }, []);
+
   // 滚轮缩放时以指针局部位置为锚点，保持指向区域留在指针下方。
   const zoomMapFromWheel = useCallback((event: WheelEvent): void => {
     event.preventDefault();
@@ -587,20 +617,11 @@ const AnnotatedWorldMap = ({
     const scaleMultiplier = event.deltaY < 0 ? MAP_ZOOM_STEP : 1 / MAP_ZOOM_STEP;
 
     setViewportTransform((currentViewportTransform: ViewportTransform): ViewportTransform => {
-      const nextScale = clampNumber(
+      return zoomViewportAtPoint(
+        currentViewportTransform,
         currentViewportTransform.scale * scaleMultiplier,
-        MIN_MAP_SCALE,
-        MAX_MAP_SCALE,
-      );
-      const mapPointX = (localPointerX - currentViewportTransform.x) / currentViewportTransform.scale;
-      const mapPointY = (localPointerY - currentViewportTransform.y) / currentViewportTransform.scale;
-
-      return constrainViewportTransform(
-        {
-          scale: nextScale,
-          x: localPointerX - mapPointX * nextScale,
-          y: localPointerY - mapPointY * nextScale,
-        },
+        localPointerX,
+        localPointerY,
         containerRect.width,
         containerRect.height,
       );
@@ -768,6 +789,7 @@ const AnnotatedWorldMap = ({
     activeMarker === null
       ? `${ariaLabel}。滚轮可缩放地图，放大后可拖拽查看局部；方向键可依次聚焦标记点。`
       : `${ariaLabel}。当前标记：${activeMarker.description ? `${activeMarker.name}，${activeMarker.description}` : activeMarker.name}`;
+  const mapScaleLabel = formatMapScale(viewportTransform.scale);
 
   return (
     <>
@@ -793,6 +815,46 @@ const AnnotatedWorldMap = ({
             setFlagCursorPosition(null);
           }}
         />
+        <div
+          className="annotated-world-map__zoom-control"
+          role="group"
+          aria-label="地图缩放控制"
+        >
+          <button
+            className="annotated-world-map__zoom-button"
+            type="button"
+            aria-label="缩小地图"
+            title="缩小地图"
+            onClick={(): void => updateMapScale(viewportTransform.scale - MAP_ZOOM_SLIDER_STEP)}
+            disabled={viewportTransform.scale <= MIN_MAP_SCALE}
+          >
+            −
+          </button>
+          <label className="annotated-world-map__zoom-slider-label">
+            <span className="annotated-world-map__zoom-value">{mapScaleLabel}</span>
+            <input
+              className="annotated-world-map__zoom-slider"
+              type="range"
+              min={MIN_MAP_SCALE}
+              max={MAX_MAP_SCALE}
+              step={MAP_ZOOM_SLIDER_STEP}
+              value={viewportTransform.scale}
+              aria-label="地图缩放比例"
+              aria-valuetext={mapScaleLabel}
+              onChange={(event): void => updateMapScale(Number(event.currentTarget.value))}
+            />
+          </label>
+          <button
+            className="annotated-world-map__zoom-button"
+            type="button"
+            aria-label="放大地图"
+            title="放大地图"
+            onClick={(): void => updateMapScale(viewportTransform.scale + MAP_ZOOM_SLIDER_STEP)}
+            disabled={viewportTransform.scale >= MAX_MAP_SCALE}
+          >
+            +
+          </button>
+        </div>
         {tooltipMarker && markerTooltipStyle ? (
           <div
             className={`annotated-world-map__tooltip annotated-world-map__tooltip--${tooltipMarker.scope}${hoveredMarker ? ' annotated-world-map__tooltip--pointer' : ''}`}
