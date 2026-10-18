@@ -460,9 +460,16 @@ export const FLIGHT_RECORDS: FlightRecord[] = [
         aircraft: "737-800",
         origin: "日本-名古屋",
         destination: "中国-北京首都",
-        routeKind: "round-trip",
+        routeKind: "one-way",
+        departureDate: "2025-8-31",
+    },
+    {
+        airline: "中国国际航空",
+        aircraft: "330-300",
+        origin: "中国-北京首都",
+        destination: "日本-名古屋",
+        routeKind: "one-way",
         departureDate: "2025-8-29",
-        returnDate: "8-31",
     },
     {
         airline: "泰国航空",
