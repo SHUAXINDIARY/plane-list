@@ -1624,6 +1624,106 @@
   font-size: 0.95rem;
 }
 
+.flight-ledger__search {
+  display: grid;
+  flex: 1 0 100%;
+  gap: 0.32rem;
+  min-width: 0;
+  order: 3;
+}
+
+.flight-ledger__search > label {
+  color: var(--pl-text-meta);
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+.flight-ledger__search-control {
+  position: relative;
+  display: flex;
+  min-width: 0;
+}
+
+.flight-ledger__search-control input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 2.35rem;
+  padding: 0 4.15rem 0 0.75rem;
+  color: var(--pl-text-heading);
+  font: inherit;
+  font-size: 0.86rem;
+  background-color: var(--pl-surface-entry);
+  border: 1px solid var(--pl-border-input);
+  border-radius: 0.55rem;
+  transition:
+    border-color var(--motion-duration-fast) var(--motion-ease-out-quart),
+    box-shadow var(--motion-duration-fast) var(--motion-ease-out-quart);
+}
+
+.flight-ledger__search-control input::placeholder {
+  color: var(--pl-text-meta);
+  opacity: 0.92;
+}
+
+.flight-ledger__search-control input:focus-visible {
+  outline: 2px solid oklch(0.78 0.105 222);
+  outline-offset: 1px;
+  border-color: var(--pl-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--pl-accent) 16%, transparent);
+}
+
+.flight-ledger__search-control input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.flight-ledger__search-clear {
+  position: absolute;
+  top: 50%;
+  right: 0.28rem;
+  min-height: 1.8rem;
+  padding: 0 0.45rem;
+  color: var(--pl-text-meta);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.35rem;
+  transform: translateY(-50%);
+}
+
+.flight-ledger__search-clear:focus-visible {
+  outline: 2px solid oklch(0.78 0.105 222);
+  outline-offset: 1px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .flight-ledger__search-clear:hover {
+    color: var(--pl-text-heading);
+    background-color: var(--pl-surface-personal-pill);
+    border-color: var(--pl-border-muted);
+  }
+}
+
+.flight-ledger__search-hint {
+  min-height: 1rem;
+  padding: 0;
+  margin: 0;
+  color: var(--pl-text-meta);
+  font-size: 0.72rem;
+}
+
+.flight-ledger__empty {
+  padding: 1.5rem 1rem;
+  margin: 0;
+  color: var(--pl-text-data);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  text-align: center;
+  border-bottom: 1px solid var(--pl-border-divider);
+}
+
 .flight-ledger__bulk-actions {
   display: inline-flex;
   flex: 0 0 auto;
@@ -2272,8 +2372,20 @@
     align-items: stretch;
   }
 
+  .flight-ledger__search {
+    flex-basis: 100%;
+    min-width: 0;
+    order: 3;
+  }
+
+  .flight-ledger__search-control input {
+    min-height: 2.75rem;
+    font-size: 1rem;
+  }
+
   .flight-ledger__bulk-actions {
     width: 100%;
+    order: 4;
   }
 
   .flight-ledger__bulk-action {

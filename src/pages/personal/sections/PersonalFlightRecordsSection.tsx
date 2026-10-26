@@ -1,8 +1,10 @@
-import { useState, type ReactElement } from "react";
 import {
-    FLIGHT_AIRCRAFT_TYPE_COUNT,
-    FLIGHT_AIRLINE_COUNT,
-    FLIGHT_RECORD_COUNT,
+    useMemo,
+    useState,
+    type ChangeEvent,
+    type ReactElement,
+} from "react";
+import {
     flightRecordsByYear,
     type FlightYearGroup,
 } from "../constants/flightRecordsSummary";
@@ -92,14 +94,70 @@ const formatFlightDate = (flightRecord: FlightRecord): string => {
     return flightRecord.departureDate;
 };
 
-/** 年度图表的最大值，用于将各年份记录映射到相同比例。 */
-const FLIGHT_RECORD_CHART_MAX = Math.max(
-    ...flightRecordsByYear.map(
-        (flightYearGroup: FlightYearGroup): number =>
-            flightYearGroup.records.length,
-    ),
-    1,
-);
+/** 图表组件接收的按年份分组数据，确保搜索结果与可视化保持同步。 */
+interface FlightRecordsChartProps {
+    /** 当前筛选条件下的乘机记录分组。 */
+    recordsByYear: FlightYearGroup[];
+}
+
+/** 统一搜索文本的大小写与空白，保留机场名称中的连接符。 */
+const normalizeFlightSearchText = (value: string): string =>
+    value.toLocaleLowerCase("zh-CN").replace(/\s+/g, "");
+
+/** 拼接单条记录的可搜索字段，覆盖航司、机型、地点与日期。 */
+const getFlightRecordSearchText = (flightRecord: FlightRecord): string =>
+    normalizeFlightSearchText(
+        [
+            flightRecord.airline,
+            flightRecord.aircraft,
+            flightRecord.origin,
+            flightRecord.destination,
+            flightRecord.departureDate,
+            flightRecord.returnDate ?? "",
+        ].join(" "),
+    );
+
+/** 将输入拆为关键词；多个关键词需要同时命中同一条记录。 */
+const getFlightSearchTerms = (query: string): string[] =>
+    query
+        .trim()
+        .split(/\s+/)
+        .map(normalizeFlightSearchText)
+        .filter((term: string): boolean => term.length > 0);
+
+/** 按关键词模糊筛选乘机记录，并移除没有匹配项的年份分组。 */
+const filterFlightRecordsByQuery = (
+    recordsByYear: FlightYearGroup[],
+    query: string,
+): FlightYearGroup[] => {
+    const searchTerms = getFlightSearchTerms(query);
+
+    if (searchTerms.length === 0) {
+        return recordsByYear;
+    }
+
+    return recordsByYear
+        .map(
+            (flightYearGroup: FlightYearGroup): FlightYearGroup => ({
+                ...flightYearGroup,
+                records: flightYearGroup.records.filter(
+                    (flightRecord: FlightRecord): boolean => {
+                        const searchableText = getFlightRecordSearchText(
+                            flightRecord,
+                        );
+
+                        return searchTerms.every((term: string): boolean =>
+                            searchableText.includes(term),
+                        );
+                    },
+                ),
+            }),
+        )
+        .filter(
+            (flightYearGroup: FlightYearGroup): boolean =>
+                flightYearGroup.records.length > 0,
+        );
+};
 
 type FlightChartMetric = "aircraft" | "airline" | "country";
 
@@ -128,74 +186,89 @@ const getMetricValues = (
 };
 
 /** 乘机记录年度分布图，图形与文本数据保持同步。 */
-const FlightRecordsYearChart = (): ReactElement => (
-    <section
-        className="flight-records-chart"
-        aria-labelledby="flight-records-chart-title"
-    >
-        <div className="flight-records-chart__header">
-            <div>
-                <p className="personal-section__eyebrow">Annual view</p>
-                <h3 id="flight-records-chart-title">每年乘机次数</h3>
-            </div>
-            <span className="flight-records-chart__unit">单位：次</span>
-        </div>
-        <div
-            className="flight-records-chart__plot"
-            role="img"
-            aria-label="按年份统计的乘机次数柱状图"
-        >
-            {flightRecordsByYear.map(
-                (flightYearGroup: FlightYearGroup): ReactElement => {
-                    const recordCount = flightYearGroup.records.length;
-                    const barScale = recordCount / FLIGHT_RECORD_CHART_MAX;
+const FlightRecordsYearChart = ({
+    recordsByYear,
+}: FlightRecordsChartProps): ReactElement => {
+    /** 当前结果集的年度最大值，用于将各年份记录映射到相同比例。 */
+    const chartMax = Math.max(
+        ...recordsByYear.map(
+            (flightYearGroup: FlightYearGroup): number =>
+                flightYearGroup.records.length,
+        ),
+        1,
+    );
 
-                    return (
-                        <div
-                            className="flight-records-chart__row"
-                            key={flightYearGroup.year}
-                        >
-                            <span className="flight-records-chart__year">
-                                {flightYearGroup.year}
-                            </span>
-                            <span className="flight-records-chart__track">
-                                <span
-                                    className="flight-records-chart__bar"
-                                    style={{ width: `${barScale * 100}%` }}
-                                />
-                            </span>
-                            <strong className="flight-records-chart__value">
-                                {recordCount}
-                            </strong>
-                        </div>
-                    );
-                },
-            )}
-        </div>
-        <table className="sr-only">
-            <caption>各年份乘机记录数量</caption>
-            <thead>
-                <tr>
-                    <th scope="col">年份</th>
-                    <th scope="col">次数</th>
-                </tr>
-            </thead>
-            <tbody>
-                {flightRecordsByYear.map(
-                    (flightYearGroup: FlightYearGroup): ReactElement => (
-                        <tr key={`chart-table-${flightYearGroup.year}`}>
-                            <th scope="row">{flightYearGroup.year}</th>
-                            <td>{flightYearGroup.records.length}</td>
-                        </tr>
-                    ),
+    return (
+        <section
+            className="flight-records-chart"
+            aria-labelledby="flight-records-chart-title"
+        >
+            <div className="flight-records-chart__header">
+                <div>
+                    <p className="personal-section__eyebrow">Annual view</p>
+                    <h3 id="flight-records-chart-title">每年乘机次数</h3>
+                </div>
+                <span className="flight-records-chart__unit">单位：次</span>
+            </div>
+            <div
+                className="flight-records-chart__plot"
+                role="img"
+                aria-label="按年份统计的乘机次数柱状图"
+            >
+                {recordsByYear.map(
+                    (flightYearGroup: FlightYearGroup): ReactElement => {
+                        const recordCount = flightYearGroup.records.length;
+                        const barScale = recordCount / chartMax;
+
+                        return (
+                            <div
+                                className="flight-records-chart__row"
+                                key={flightYearGroup.year}
+                            >
+                                <span className="flight-records-chart__year">
+                                    {flightYearGroup.year}
+                                </span>
+                                <span className="flight-records-chart__track">
+                                    <span
+                                        className="flight-records-chart__bar"
+                                        style={{ width: `${barScale * 100}%` }}
+                                    />
+                                </span>
+                                <strong className="flight-records-chart__value">
+                                    {recordCount}
+                                </strong>
+                            </div>
+                        );
+                    },
                 )}
-            </tbody>
-        </table>
-    </section>
-);
+            </div>
+            <table className="sr-only">
+                <caption>各年份乘机记录数量</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">年份</th>
+                        <th scope="col">次数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {recordsByYear.map(
+                        (flightYearGroup: FlightYearGroup): ReactElement => (
+                            <tr key={`chart-table-${flightYearGroup.year}`}>
+                                <th scope="row">{flightYearGroup.year}</th>
+                                <td>{flightYearGroup.records.length}</td>
+                            </tr>
+                        ),
+                    )}
+                </tbody>
+            </table>
+        </section>
+    );
+};
 
 /** 按年份展示乘机机型构成，图形与屏幕阅读器表格保持同步。 */
-const FlightRecordsAircraftChart = (): ReactElement => {
+const FlightRecordsAircraftChart = ({
+    recordsByYear,
+}: FlightRecordsChartProps): ReactElement => {
     const [metric, setMetric] = useState<FlightChartMetric>("aircraft");
     const metricNames: Record<FlightChartMetric, string> = {
         aircraft: "机型",
@@ -204,7 +277,7 @@ const FlightRecordsAircraftChart = (): ReactElement => {
     };
     let metricValues = Array.from(
         new Set(
-            flightRecordsByYear.flatMap((group) =>
+            recordsByYear.flatMap((group) =>
                 group.records.flatMap((record) => getMetricValues(record, metric)),
             ),
         ),
@@ -221,7 +294,7 @@ const FlightRecordsAircraftChart = (): ReactElement => {
             0,
         );
     const maxMetricCount = Math.max(
-        ...flightRecordsByYear.flatMap((group) =>
+        ...recordsByYear.flatMap((group) =>
             metricValues.map((value) => countMetric(group, value)),
         ),
         1,
@@ -264,13 +337,13 @@ const FlightRecordsAircraftChart = (): ReactElement => {
                 <div
                     className="flight-aircraft-chart__grid"
                     style={{
-                        gridTemplateColumns: `minmax(6.5rem, 8.5rem) repeat(${flightRecordsByYear.length}, minmax(3.6rem, 1fr))`,
+                        gridTemplateColumns: `minmax(6.5rem, 8.5rem) repeat(${recordsByYear.length}, minmax(3.6rem, 1fr))`,
                     }}
                 >
                     <span className="flight-aircraft-chart__corner">
                         {metricNames[metric]} / 年份
                     </span>
-                    {flightRecordsByYear.map(
+                    {recordsByYear.map(
                         (flightYearGroup: FlightYearGroup): ReactElement => (
                             <strong
                                 className="flight-aircraft-chart__year"
@@ -287,7 +360,7 @@ const FlightRecordsAircraftChart = (): ReactElement => {
                         >
                             {value}
                         </strong>,
-                        ...flightRecordsByYear.map(
+                        ...recordsByYear.map(
                             (flightYearGroup: FlightYearGroup): ReactElement => {
                                 const count = countMetric(flightYearGroup, value);
 
@@ -321,7 +394,7 @@ const FlightRecordsAircraftChart = (): ReactElement => {
                     </tr>
                 </thead>
                 <tbody>
-                    {flightRecordsByYear.flatMap(
+                    {recordsByYear.flatMap(
                         (flightYearGroup: FlightYearGroup): ReactElement[] =>
                             metricValues.map(
                                 (value): ReactElement => (
@@ -343,10 +416,73 @@ const FlightRecordsAircraftChart = (): ReactElement => {
  * 个人档案乘机台账：按年份分组展示航司、机型、航线与日期。
  */
 const PersonalFlightRecordsSection = (): ReactElement => {
+    /** 当前输入框中的模糊搜索关键词。 */
+    const [flightSearchQuery, setFlightSearchQuery] = useState<string>("");
+
     /** 当前展开的年份集合；空集合表示全部折叠。 */
     const [expandedFlightYears, setExpandedFlightYears] = useState<
         ReadonlySet<number>
     >(new Set<number>());
+
+    /** 根据搜索词派生当前可见的年份分组，避免重复保存派生状态。 */
+    const filteredFlightRecordsByYear = useMemo(
+        (): FlightYearGroup[] =>
+            filterFlightRecordsByQuery(flightRecordsByYear, flightSearchQuery),
+        [flightSearchQuery],
+    );
+
+    /** 将当前可见年份分组扁平化，供统计数字与空状态使用。 */
+    const filteredFlightRecords = useMemo(
+        (): FlightRecord[] =>
+            filteredFlightRecordsByYear.flatMap(
+                (flightYearGroup: FlightYearGroup): FlightRecord[] =>
+                    flightYearGroup.records,
+            ),
+        [filteredFlightRecordsByYear],
+    );
+
+    /** 搜索输入变化时自动展开匹配年份，让结果立即可见。 */
+    const handleFlightSearchChange = (
+        event: ChangeEvent<HTMLInputElement>,
+    ): void => {
+        const nextQuery = event.target.value;
+        const nextFilteredGroups = filterFlightRecordsByQuery(
+            flightRecordsByYear,
+            nextQuery,
+        );
+
+        setFlightSearchQuery(nextQuery);
+        setExpandedFlightYears(
+            getFlightSearchTerms(nextQuery).length === 0
+                ? new Set<number>()
+                : new Set<number>(
+                      nextFilteredGroups.map(
+                          (flightYearGroup: FlightYearGroup): number =>
+                              flightYearGroup.year,
+                      ),
+                  ),
+        );
+    };
+
+    /** 清除搜索词并恢复默认的年份折叠状态。 */
+    const clearFlightSearch = (): void => {
+        setFlightSearchQuery("");
+        setExpandedFlightYears(new Set<number>());
+    };
+
+    /** 当前搜索结果涉及的不重复航司数量。 */
+    const filteredFlightAirlineCount = new Set(
+        filteredFlightRecords.map(
+            (flightRecord: FlightRecord): string => flightRecord.airline,
+        ),
+    ).size;
+
+    /** 当前搜索结果涉及的不重复机型数量。 */
+    const filteredFlightAircraftTypeCount = new Set(
+        filteredFlightRecords.map(
+            (flightRecord: FlightRecord): string => flightRecord.aircraft,
+        ),
+    ).size;
 
     /** 独立切换单个年份，不影响其他年份面板的展开状态。 */
     const toggleFlightYear = (flightYear: number): void => {
@@ -371,7 +507,7 @@ const PersonalFlightRecordsSection = (): ReactElement => {
     const expandAllFlightYears = (): void => {
         setExpandedFlightYears(
             new Set<number>(
-                flightRecordsByYear.map(
+                filteredFlightRecordsByYear.map(
                     (flightYearGroup: FlightYearGroup): number =>
                         flightYearGroup.year,
                 ),
@@ -385,8 +521,8 @@ const PersonalFlightRecordsSection = (): ReactElement => {
     };
 
     const areAllFlightYearsExpanded =
-        flightRecordsByYear.length > 0 &&
-        expandedFlightYears.size === flightRecordsByYear.length;
+        filteredFlightRecordsByYear.length > 0 &&
+        expandedFlightYears.size === filteredFlightRecordsByYear.length;
     const areAllFlightYearsCollapsed = expandedFlightYears.size === 0;
 
     return (
@@ -400,20 +536,59 @@ const PersonalFlightRecordsSection = (): ReactElement => {
             </div>
 
             <div className="flight-ledger">
-                <div className="flight-ledger__toolbar" aria-label="乘机记录统计">
+                <div
+                    className="flight-ledger__toolbar"
+                    aria-label="乘机记录统计与搜索"
+                >
                     <div className="flight-ledger__stats">
                         <span>
-                            <strong>{FLIGHT_RECORD_COUNT}</strong>
+                            <strong>{filteredFlightRecords.length}</strong>
                             次乘机
                         </span>
                         <span>
-                            <strong>{FLIGHT_AIRLINE_COUNT}</strong>
+                            <strong>{filteredFlightAirlineCount}</strong>
                             家航司
                         </span>
                         <span>
-                            <strong>{FLIGHT_AIRCRAFT_TYPE_COUNT}</strong>
+                            <strong>{filteredFlightAircraftTypeCount}</strong>
                             种机型
                         </span>
+                    </div>
+                    <div
+                        className="flight-ledger__search"
+                        role="search"
+                        aria-label="搜索乘机记录"
+                    >
+                        <label htmlFor="flight-record-search">搜索乘机记录</label>
+                        <div className="flight-ledger__search-control">
+                            <input
+                                id="flight-record-search"
+                                type="search"
+                                value={flightSearchQuery}
+                                onChange={handleFlightSearchChange}
+                                placeholder="机型、航司、机场或城市名称"
+                                autoComplete="off"
+                            />
+                            {flightSearchQuery.length > 0 ? (
+                                <button
+                                    className="flight-ledger__search-clear"
+                                    type="button"
+                                    aria-label="清除乘机记录搜索"
+                                    onClick={clearFlightSearch}
+                                >
+                                    清除
+                                </button>
+                            ) : null}
+                        </div>
+                        <p
+                            className="flight-ledger__search-hint"
+                            role="status"
+                            aria-live="polite"
+                        >
+                            {getFlightSearchTerms(flightSearchQuery).length > 0
+                                ? `找到 ${filteredFlightRecords.length} 条记录`
+                                : "支持输入多个关键词，以空格分隔"}
+                        </p>
                     </div>
                     <div
                         className="flight-ledger__bulk-actions"
@@ -447,11 +622,23 @@ const PersonalFlightRecordsSection = (): ReactElement => {
                     </div>
                 </div>
 
-                <FlightRecordsYearChart />
-                <FlightRecordsAircraftChart />
+                {filteredFlightRecordsByYear.length > 0 ? (
+                    <>
+                        <FlightRecordsYearChart
+                            recordsByYear={filteredFlightRecordsByYear}
+                        />
+                        <FlightRecordsAircraftChart
+                            recordsByYear={filteredFlightRecordsByYear}
+                        />
+                    </>
+                ) : (
+                    <p className="flight-ledger__empty" role="status">
+                        未找到匹配的乘机记录，请尝试输入机型、航司、机场或城市名称。
+                    </p>
+                )}
 
                 <div className="flight-ledger__body">
-                    {flightRecordsByYear.map(
+                    {filteredFlightRecordsByYear.map(
                         (flightYearGroup: FlightYearGroup): ReactElement => {
                             const isFlightYearExpanded = expandedFlightYears.has(
                                 flightYearGroup.year,
