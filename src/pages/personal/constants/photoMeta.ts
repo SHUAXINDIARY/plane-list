@@ -1,9 +1,9 @@
 // 飞机模型目录图片URL列表
 const MODEL_PHOTO_URLS = [
-    "https://img.shuaxinjs.cn/aircraftModel/1793533319949_dbb48bdd-41a8-4bc1-ace6-9e0beba7c299_%E6%9C%AA%E6%A0%87%E9%A2%98-1_5.jpg",
-    "https://img.shuaxinjs.cn/aircraftModel/1793533332769_a741fd69-39a9-457d-a9a0-993de83107ff_%E6%9C%AA%E6%A0%87%E9%A2%98-1.jpg",
-    "https://img.shuaxinjs.cn/aircraftModel/1793533228372_3e468d58-d23e-4aa8-9dc6-d51b2c209ebf_%E6%9C%AA%E6%A0%87%E9%A2%98-1_3.jpg",
-    "https://img.shuaxinjs.cn/aircraftModel/1793533242044_33758a71-52b2-4e6a-8328-72ed3c5f5a79_%E6%9C%AA%E6%A0%87%E9%A2%98-1.jpg",
+    "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=plane-model%2F1793610570333_1793533228372_3e468d58-d23e-4aa8-9dc6-d51b2c209ebf_%E6%9C%AA%E6%A0%87%E9%A2%98-1_3.jpg",
+    "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=plane-model%2F1793610570879_1793533242044_33758a71-52b2-4e6a-8328-72ed3c5f5a79_%E6%9C%AA%E6%A0%87%E9%A2%98-1.jpg",
+    "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=plane-model%2F1793610572185_1793533319949_dbb48bdd-41a8-4bc1-ace6-9e0beba7c299_%E6%9C%AA%E6%A0%87%E9%A2%98-1_5.jpg",
+    "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=plane-model%2F1793610573034_1793533332769_a741fd69-39a9-457d-a9a0-993de83107ff_%E6%9C%AA%E6%A0%87%E9%A2%98-1.jpg",
     "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=plane-model%2F1791591102478_PANA4711.jpg",
     "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=plane-model%2F1791591102877_PANA4747.JPG%EF%BC%88%E5%90%88%E5%B9%B6%EF%BC%89.jpg",
     "https://akdb.nixideshuaxin.workers.dev/images/file?bucket=plan&key=plane-model%2F1791591103159_PANA4777.JPG%EF%BC%88%E5%90%88%E5%B9%B6%EF%BC%89.jpg",
