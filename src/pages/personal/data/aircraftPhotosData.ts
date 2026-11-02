@@ -9,6 +9,9 @@ import type {
 /** `key` 仅含文件名时使用的根目录筛选键。 */
 const AIRCRAFT_PHOTO_ROOT_DIRECTORY_KEY = "root";
 
+/** 历史 aircraftModel 路径在相册中沿用 plane-model 目录分类。 */
+const AIRCRAFT_MODEL_DIRECTORY_KEY = "plane-model";
+
 /** 原图 URL 到构建期生成的本地预览图 URL 映射。 */
 const aircraftPhotoPreviewUrlByOriginalUrl: Record<string, string> =
     aircraftPhotoPreviewUrls;
@@ -16,6 +19,14 @@ const aircraftPhotoPreviewUrlByOriginalUrl: Record<string, string> =
 // 从图片链接的 key 参数提取文件所属目录，保留完整目录层级供筛选复用。
 const getAircraftPhotoDirectoryKey = (originalUrl: string): string => {
     const parsedUrl = new URL(originalUrl);
+    const pathSegments = parsedUrl.pathname
+        .split("/")
+        .filter((pathSegment: string): boolean => pathSegment.length > 0);
+
+    if (pathSegments.includes("aircraftModel")) {
+        return AIRCRAFT_MODEL_DIRECTORY_KEY;
+    }
+
     const objectKey = parsedUrl.searchParams.get("key") ?? "";
     const keySegments = objectKey
         .split("/")

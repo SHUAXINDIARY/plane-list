@@ -9539,3 +9539,25 @@
 
 - `src/pages/personal/index.css`：调整搜索区域的 flex 基线、宽度和行排序。
 - `taskRecord.md`：追加本次布局优化记录。
+
+---
+
+## 日期
+
+2026-11-02
+
+## 任务目的
+
+将带有 `aircraftModel` 路径的图片归入 `plane-model` 相册分类。
+
+## 完成过程
+
+1. 检查飞机照片目录键解析逻辑，确认无 `key` 查询参数的 `aircraftModel` 链接会被误归入根目录。
+2. 增加历史路径到 `plane-model` 的目录映射，并更新照片类型注释。
+3. 运行生产构建和差异检查验证修改。
+
+## 修改具体文件
+
+- `src/pages/personal/data/aircraftPhotosData.ts`：将路径包含 `aircraftModel` 的链接归类为 `plane-model`。
+- `src/pages/personal/type.d.ts`：补充目录分类规则说明。
+- `taskRecord.md`：追加本次分类修复记录。
