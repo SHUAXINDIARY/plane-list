@@ -3,6 +3,20 @@ import type { CheckedAirport, FlightRecord } from "./type";
 /** 当前个人档案中的机场打卡数据，后续可迁移到后端接口。 */
 export const CHECKED_AIRPORTS: CheckedAirport[] = [
     {
+        name: "日本福冈机场",
+        lat: 33.585899,
+        lng: 130.451004,
+        type: "airport",
+        description: "日本福冈县福冈市福冈机场",
+    },
+    {
+        name: "日本冲绳那霸机场",
+        lat: 26.192437,
+        lng: 127.639804,
+        type: "airport",
+        description: "日本冲绳县那霸市那霸机场",
+    },
+    {
         name: "北京大兴国际机场",
         lat: 39.509945,
         lng: 116.41092,
