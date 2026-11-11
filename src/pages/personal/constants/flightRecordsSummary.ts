@@ -7,7 +7,7 @@ import type { FlightRecord } from "../../../constants/type";
 export interface FlightYearGroup {
     /** 分组年份，取自 `departureDate` 首段。 */
     year: number;
-    /** 该年份内的乘机记录，保持源数据顺序。 */
+    /** 该年份内的乘机记录，按出发日期从新到旧排序。 */
     records: FlightRecord[];
 }
 
@@ -21,7 +21,7 @@ const parseFlightRecordYear = (departureDate: string): number => {
 };
 
 /**
- * 将乘机记录按年份倒序聚合，同年内保持 `FLIGHT_RECORDS` 既有顺序。
+ * 将乘机记录按年份倒序聚合，同年内按出发日期从新到旧排序。
  */
 const groupFlightRecordsByYear = (
     flightRecords: FlightRecord[],
@@ -39,7 +39,15 @@ const groupFlightRecordsByYear = (
         .map(
             ([year, records]: [number, FlightRecord[]]): FlightYearGroup => ({
                 year,
-                records,
+                // 按数字段比较未补零的日期，避免字符串排序将 9 月排在 10 月前。
+                records: [...records].sort(
+                    (firstRecord: FlightRecord, secondRecord: FlightRecord): number =>
+                        secondRecord.departureDate.localeCompare(
+                            firstRecord.departureDate,
+                            "en",
+                            { numeric: true },
+                        ),
+                ),
             }),
         )
         .sort(

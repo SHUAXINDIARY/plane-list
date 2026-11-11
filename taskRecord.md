@@ -9561,3 +9561,24 @@
 - `src/pages/personal/data/aircraftPhotosData.ts`：将路径包含 `aircraftModel` 的链接归类为 `plane-model`。
 - `src/pages/personal/type.d.ts`：补充目录分类规则说明。
 - `taskRecord.md`：追加本次分类修复记录。
+
+---
+
+## 日期
+
+2026-11-11
+
+## 任务目的
+
+将年份内的乘机记录按出发日期从新到旧排序。
+
+## 完成过程
+
+1. 使用数字感知日期比较，兼容未补零的月份和日期，保留源数组。
+2. 验证乱序日期、跨年、同日、空数组与源数据不变，均通过。
+3. 类型检查受已有 ViewportNavigationControls.tsx 中未使用的 onSettingsExport 阻塞；当前无 ReadLints 工具。
+
+## 修改具体文件
+
+- `src/pages/personal/constants/flightRecordsSummary.ts`：增加年份内的日期倒序排序并更新注释。
+- `taskRecord.md`：追加本次任务记录。
